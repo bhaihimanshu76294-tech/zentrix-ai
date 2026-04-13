@@ -36,21 +36,16 @@
 
 <textarea id="text" placeholder="Type text here..."></textarea><br>
 
-<select id="language" onchange="loadVoices()">
-  <option value="en">English (Best 🔥)</option>
-  <option value="hi">Hindi</option>
-</select><br>
-
 <select id="voiceSelect"></select><br>
 
 <select id="rate">
-  <option value="1">Normal Speed</option>
+  <option value="1">Normal</option>
   <option value="0.8">Slow</option>
   <option value="1.3">Fast</option>
 </select>
 
 <select id="pitch">
-  <option value="1">Normal Voice</option>
+  <option value="1">Normal</option>
   <option value="0.8">Deep</option>
   <option value="1.5">Sharp</option>
 </select>
@@ -60,27 +55,19 @@
 <button onclick="speak()">Generate Voice</button>
 
 <script>
-let allVoices = [];
+let voices = [];
 
 function loadVoices() {
-  allVoices = speechSynthesis.getVoices();
-  let lang = document.getElementById("language").value;
-  let voiceSelect = document.getElementById("voiceSelect");
+  voices = speechSynthesis.getVoices();
+  let select = document.getElementById("voiceSelect");
+  select.innerHTML = "";
 
-  voiceSelect.innerHTML = "";
-
-  let filtered = allVoices.filter(v => v.lang.startsWith(lang));
-
-  filtered.forEach((voice, i) => {
+  voices.forEach((voice, i) => {
     let option = document.createElement("option");
     option.value = i;
-    option.text = voice.name;
-    voiceSelect.appendChild(option);
+    option.text = voice.name + " (" + voice.lang + ")";
+    select.appendChild(option);
   });
-
-  // Auto select best voice
-  let best = filtered.findIndex(v => v.name.toLowerCase().includes("google") || v.name.toLowerCase().includes("english"));
-  if (best >= 0) voiceSelect.value = best;
 }
 
 speechSynthesis.onvoiceschanged = loadVoices;
@@ -91,13 +78,8 @@ function speak() {
   let rate = document.getElementById("rate").value;
   let pitch = document.getElementById("pitch").value;
 
-  let voices = speechSynthesis.getVoices();
-  let lang = document.getElementById("language").value;
-
-  let filtered = voices.filter(v => v.lang.startsWith(lang));
-
   let speech = new SpeechSynthesisUtterance(text);
-  speech.voice = filtered[voiceIndex];
+  speech.voice = voices[voiceIndex];
   speech.rate = rate;
   speech.pitch = pitch;
 
