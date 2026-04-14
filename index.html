@@ -12,51 +12,42 @@ body{
  color:white;
  text-align:center;
 }
-
 h1{margin:20px;}
-
 .box{
  background:rgba(255,255,255,0.05);
  margin:15px;
  padding:20px;
  border-radius:15px;
 }
-
 textarea{
  width:90%;
  height:100px;
  border-radius:10px;
  padding:10px;
 }
-
 select,button{
  margin:6px;
  padding:10px;
  border-radius:10px;
  border:none;
 }
-
 button{
  background:cyan;
  font-weight:bold;
 }
-
 .mode{
  background:#222;
  color:white;
 }
-
 .active{
  background:cyan;
  color:black;
 }
-
 .history{
  max-height:150px;
  overflow:auto;
  text-align:left;
 }
-
 .popup{
  display:none;
  position:fixed;
@@ -67,7 +58,6 @@ button{
  justify-content:center;
  align-items:center;
 }
-
 .popup-box{
  background:#111;
  padding:20px;
@@ -119,7 +109,7 @@ button{
 <div class="popup" id="popup">
  <div class="popup-box">
   <h2>Premium 🔒</h2>
-  <p>Download & Real Voices Available in Premium</p>
+  <p>Real AI Voice & MP3 Download Available in Premium</p>
   <button onclick="closePopup()">Close</button>
  </div>
 </div>
@@ -127,6 +117,8 @@ button{
 <script>
 let mode="free";
 let voices=[];
+let recordedChunks=[];
+let mediaRecorder;
 
 function setMode(m){
  mode=m;
@@ -149,7 +141,6 @@ function loadVoices(){
   v.appendChild(opt);
  });
 }
-
 speechSynthesis.onvoiceschanged=loadVoices;
 
 function generate(){
@@ -167,8 +158,22 @@ function generate(){
  msg.rate=document.getElementById("rate").value;
  msg.pitch=document.getElementById("pitch").value;
 
+ // 🎙️ Recording
+ let audioContext=new AudioContext();
+ let dest=audioContext.createMediaStreamDestination();
+
+ mediaRecorder=new MediaRecorder(dest.stream);
+ recordedChunks=[];
+
+ mediaRecorder.ondataavailable=e=>recordedChunks.push(e.data);
+ mediaRecorder.start();
+
  speechSynthesis.cancel();
  speechSynthesis.speak(msg);
+
+ msg.onend=()=>{
+  mediaRecorder.stop();
+ };
 
  addHistory(text);
 }
@@ -178,7 +183,19 @@ function stop(){
 }
 
 function downloadAudio(){
- document.getElementById("popup").style.display="flex";
+
+ if(recordedChunks.length===0){
+  alert("Pehle generate karo");
+  return;
+ }
+
+ let blob=new Blob(recordedChunks,{type:"audio/webm"});
+ let url=URL.createObjectURL(blob);
+
+ let a=document.createElement("a");
+ a.href=url;
+ a.download="zentrix_voice.webm";
+ a.click();
 }
 
 function addHistory(text){
