@@ -1,4 +1,4 @@
-<!-- version 1000 -->
+<!-- version 3000 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,45 +7,73 @@
 
 <style>
 body {
-  margin: 0;
+  margin:0;
   font-family: Arial;
-  background: linear-gradient(135deg, #0b1a3a, #000);
-  color: white;
-  text-align: center;
+  background: linear-gradient(135deg,#0b1a3a,#000);
+  color:white;
+  text-align:center;
 }
 
-h1 {
-  margin-top: 20px;
-}
+h1 {margin:20px;}
 
-.container {
-  margin: 20px;
-  padding: 20px;
+.card {
   background: rgba(255,255,255,0.05);
-  border-radius: 15px;
+  margin:15px;
+  padding:20px;
+  border-radius:15px;
 }
 
 textarea {
-  width: 90%;
-  height: 100px;
-  border-radius: 10px;
-  padding: 10px;
-  border: none;
+  width:90%;
+  height:100px;
+  border-radius:10px;
+  padding:10px;
 }
 
-select, button {
-  margin: 8px;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
+select,button {
+  margin:5px;
+  padding:10px;
+  border-radius:10px;
+  border:none;
 }
 
 button {
-  background: cyan;
-  color: black;
-  font-weight: bold;
+  background:cyan;
+  font-weight:bold;
 }
 
+.mode {
+  background:#222;
+  color:white;
+}
+
+.active {
+  background:cyan;
+  color:black;
+}
+
+.history {
+  max-height:150px;
+  overflow:auto;
+  text-align:left;
+}
+
+.popup {
+  display:none;
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+}
+
+.box {
+  background:#111;
+  padding:20px;
+  border-radius:15px;
+}
 </style>
 </head>
 
@@ -53,66 +81,114 @@ button {
 
 <h1>Zentrix AI 🔥</h1>
 
-<div class="container">
+<div class="card">
 
-<textarea id="text" placeholder="Type your text..."></textarea><br>
+<button id="freeBtn" class="mode active" onclick="setMode('free')">FREE</button>
+<button id="premiumBtn" class="mode" onclick="setMode('premium')">PREMIUM 🔒</button>
 
-<select id="voiceSelect"></select><br>
+<br><br>
+
+<textarea id="text" placeholder="Type text..."></textarea><br>
+
+<select id="voice"></select><br>
 
 <select id="rate">
-  <option value="1">Normal</option>
-  <option value="0.8">Slow</option>
-  <option value="1.3">Fast</option>
+<option value="1">Normal</option>
+<option value="0.8">Slow</option>
+<option value="1.3">Fast</option>
 </select>
 
 <select id="pitch">
-  <option value="1">Normal</option>
-  <option value="0.8">Deep</option>
-  <option value="1.5">Sharp</option>
+<option value="1">Normal</option>
+<option value="0.8">Deep</option>
+<option value="1.5">Sharp</option>
 </select>
 
 <br>
 
-<button onclick="speak()">🎤 Generate</button>
+<button onclick="generate()">🎤 Generate</button>
 <button onclick="stop()">⛔ Stop</button>
+<button onclick="download()">⬇ Download</button>
 
 </div>
 
+<div class="card">
+<h3>History</h3>
+<div id="history" class="history"></div>
+</div>
+
+<div class="popup" id="popup">
+  <div class="box">
+    <h2>Premium 🔒</h2>
+    <p>Unlock Real Voices</p>
+    <button onclick="closePopup()">Close</button>
+  </div>
+</div>
+
 <script>
-let voices = [];
+let mode="free";
+let voices=[];
+let lastAudio=null;
 
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
-  let select = document.getElementById("voiceSelect");
-  select.innerHTML = "";
-
-  voices.forEach((v, i) => {
-    let option = document.createElement("option");
-    option.value = i;
-    option.text = v.name + " (" + v.lang + ")";
-    select.appendChild(option);
-  });
+function setMode(m){
+ mode=m;
+ document.getElementById("freeBtn").classList.remove("active");
+ document.getElementById("premiumBtn").classList.remove("active");
+ if(m==="free") document.getElementById("freeBtn").classList.add("active");
+ else document.getElementById("premiumBtn").classList.add("active");
 }
 
-speechSynthesis.onvoiceschanged = loadVoices;
-
-function speak() {
-  let text = document.getElementById("text").value;
-  let voiceIndex = document.getElementById("voiceSelect").value;
-  let rate = document.getElementById("rate").value;
-  let pitch = document.getElementById("pitch").value;
-
-  let msg = new SpeechSynthesisUtterance(text);
-  msg.voice = voices[voiceIndex];
-  msg.rate = rate;
-  msg.pitch = pitch;
-
-  speechSynthesis.cancel();
-  speechSynthesis.speak(msg);
+function loadVoices(){
+ voices=speechSynthesis.getVoices();
+ let v=document.getElementById("voice");
+ v.innerHTML="";
+ voices.forEach((voice,i)=>{
+  let opt=document.createElement("option");
+  opt.value=i;
+  opt.text=voice.name+" ("+voice.lang+")";
+  v.appendChild(opt);
+ });
 }
 
-function stop() {
-  speechSynthesis.cancel();
+speechSynthesis.onvoiceschanged=loadVoices;
+
+function generate(){
+ if(mode==="premium"){
+  document.getElementById("popup").style.display="flex";
+  return;
+ }
+
+ let text=document.getElementById("text").value;
+ if(!text) return alert("Enter text");
+
+ let msg=new SpeechSynthesisUtterance(text);
+ msg.voice=voices[document.getElementById("voice").value];
+ msg.rate=document.getElementById("rate").value;
+ msg.pitch=document.getElementById("pitch").value;
+
+ speechSynthesis.cancel();
+ speechSynthesis.speak(msg);
+
+ addHistory(text);
+}
+
+function stop(){
+ speechSynthesis.cancel();
+}
+
+function addHistory(text){
+ let h=document.getElementById("history");
+ let div=document.createElement("div");
+ div.textContent=text;
+ h.prepend(div);
+}
+
+function download(){
+ alert("Download available in premium 🔒");
+}
+
+function closePopup(){
+ document.getElementById("popup").style.display="none";
 }
 </script>
 
