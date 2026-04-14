@@ -1,115 +1,153 @@
-Create a professional AI Voice Generator web app for content creators.
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zentrix AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(135deg, #0b1a3a, #000);
+      color: white;
+      text-align: center;
+    }
 
-Brand Name: Zentrix AI
+    h1 {
+      margin-top: 25px;
+      font-size: 28px;
+    }
 
-🎯 Target Users:
+    .container {
+      background: rgba(255,255,255,0.05);
+      margin: 20px;
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
 
-- YouTubers
-- Instagram Reels creators
-- Story narration creators
+    textarea {
+      width: 95%;
+      height: 120px;
+      border-radius: 10px;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+    }
 
----
+    select, button {
+      margin: 8px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+    }
 
-🖤 UI Design:
+    button {
+      background: linear-gradient(45deg, #00ffcc, #00ccff);
+      color: black;
+      font-weight: bold;
+    }
 
-- Dark premium UI (black + blue gradient)
-- Glassmorphism cards
-- Smooth animations
-- Mobile-first responsive design
-- Clean modern fonts
+    button:hover {
+      opacity: 0.8;
+    }
 
----
+    .tag {
+      color: #00ffcc;
+      font-size: 12px;
+    }
 
-🎤 Core Features:
+    .loader {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
 
-1. Text Input:
+<body>
 
-- Large textarea for script
+<h1>Zentrix AI 🔥</h1>
+<p class="tag">Best result: English / Hinglish use kare</p>
 
-2. Voice System:
+<div class="container">
 
-- Voice dropdown (Male / Female labels)
-- Language selector (English / Hindi)
-- Auto-select best English voice
-- Tag: "🔥 Best Quality"
+<textarea id="text" placeholder="Type your text here..."></textarea><br>
 
-3. Controls:
+<select id="voiceSelect"></select><br>
 
-- Speed control slider
-- Pitch control slider
+<select id="rate">
+  <option value="1">Normal Speed</option>
+  <option value="0.8">Slow</option>
+  <option value="1.3">Fast</option>
+</select>
 
----
+<select id="pitch">
+  <option value="1">Normal Voice</option>
+  <option value="0.8">Deep</option>
+  <option value="1.5">Sharp</option>
+</select>
 
-🎬 Creator Tools (IMPORTANT):
+<br>
 
-- Button: "YouTube Script Voice"
-- Button: "Instagram Reel Voice"
-- Button: "Story Narration"
+<button onclick="speak()">🎤 Generate</button>
+<button onclick="stopVoice()">⛔ Stop</button>
 
-👉 Each button auto-adjust:
+<div class="loader" id="loading">Generating...</div>
 
-- Speed
-- Pitch
-- Voice style
+</div>
 
----
+<script>
+let voices = [];
 
-💎 Premium System:
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  let select = document.getElementById("voiceSelect");
+  select.innerHTML = "";
 
-FREE:
+  voices.forEach((v, i) => {
+    let option = document.createElement("option");
+    option.value = i;
+    option.text = v.name + " (" + v.lang + ")";
+    select.appendChild(option);
+  });
 
-- Basic browser voice
-- Unlimited
+  let best = voices.findIndex(v => v.lang.includes("en"));
+  if (best >= 0) select.value = best;
+}
 
-PREMIUM:
+speechSynthesis.onvoiceschanged = loadVoices;
 
-- Better voice selection
-- Faster processing
-- More voice styles
+function speak() {
+  let text = document.getElementById("text").value;
+  if (!text) {
+    alert("Text likh bhai 😅");
+    return;
+  }
 
-👉 Show popup after 3 uses:
-"Upgrade to Premium 🔒"
+  document.getElementById("loading").style.display = "block";
 
----
+  let voiceIndex = document.getElementById("voiceSelect").value;
+  let rate = document.getElementById("rate").value;
+  let pitch = document.getElementById("pitch").value;
 
-💰 Pricing UI:
+  let speech = new SpeechSynthesisUtterance(text);
+  speech.voice = voices[voiceIndex];
+  speech.rate = rate;
+  speech.pitch = pitch;
 
-- ₹10 → 1 day access
-- ₹49 → Creator Pack
-- Show UPI payment button
+  speech.onend = () => {
+    document.getElementById("loading").style.display = "none";
+  };
 
----
+  speechSynthesis.cancel();
+  speechSynthesis.speak(speech);
+}
 
-🎧 Features:
+function stopVoice(){
+  speechSynthesis.cancel();
+  document.getElementById("loading").style.display = "none";
+}
+</script>
 
-- Generate Voice button
-- Stop button
-- Download button (if possible)
-- Loading animation
-- Error message if empty input
-
----
-
-📦 Technical:
-
-- Pure HTML, CSS, JavaScript
-- Single file (index.html)
-- Use SpeechSynthesis API
-- Clean structured code
-
----
-
-🎯 Goal:
-
-- Make it look like a real startup product
-- Simple, fast, attractive
-- Designed for creators, not developers
-- Should feel better than basic tools
-
----
-
-⚠️ Important:
-
-- Focus on EXPERIENCE, not just voice
-- UI should feel premium and modern
-- Make user want to use it again
+</body>
+</html>
