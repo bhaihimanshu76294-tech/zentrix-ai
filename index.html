@@ -1,14 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TEST PAGE</title>
+<title>Zentrix AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  background: black;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+textarea {
+  width: 90%;
+  height: 100px;
+  margin: 10px;
+}
+button {
+  padding: 10px;
+  margin: 5px;
+}
+</style>
 </head>
-<body style="background:black; color:white; text-align:center; margin-top:50px;">
 
-<h1>🔥 WEBSITE WORKING 🔥</h1>
-<p>Agar ye dikh raha hai to sab sahi hai</p>
+<body>
 
-<button onclick="alert('Button working 😈')">Click Me</button>
+<h1>Zentrix AI 🔥</h1>
+
+<textarea id="text" placeholder="Type text..."></textarea><br>
+
+<button onclick="speak()">Speak</button>
+<button onclick="stop()">Stop</button>
+
+<script>
+function speak() {
+  let text = document.getElementById("text").value;
+  let msg = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(msg);
+}
+
+function stop() {
+  speechSynthesis.cancel();
+}
+</script>
 
 </body>
 </html>
