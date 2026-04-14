@@ -107,6 +107,7 @@ button{
 
 <button onclick="generate()">🎤 Generate</button>
 <button onclick="stop()">⛔ Stop</button>
+<button onclick="downloadAudio()">⬇ Download</button>
 
 </div>
 
@@ -118,7 +119,7 @@ button{
 <div class="popup" id="popup">
  <div class="popup-box">
   <h2>Premium 🔒</h2>
-  <p>Coming Soon...</p>
+  <p>Download & Real Voices Available in Premium</p>
   <button onclick="closePopup()">Close</button>
  </div>
 </div>
@@ -174,6 +175,10 @@ function generate(){
 
 function stop(){
  speechSynthesis.cancel();
+}
+
+function downloadAudio(){
+ document.getElementById("popup").style.display="flex";
 }
 
 function addHistory(text){
