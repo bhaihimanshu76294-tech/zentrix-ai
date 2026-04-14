@@ -152,15 +152,43 @@ function loadVoices(){
 
 speechSynthesis.onvoiceschanged=loadVoices;
 
-function generate(){
- if(mode==="premium"){
-  document.getElementById("popup").style.display="flex";
-  return;
- }
+async function generate(){
 
  let text=document.getElementById("text").value;
  if(!text) return alert("Enter text");
 
+ // 🔐 YAHAN API KEY DAALNI HAI
+ let apiKey="sk_f91fe2624c0d481e5d00ff582ff4014c362c97740f0d94e8";
+
+ if(mode==="premium"){
+
+  let res=await fetch("https://api.elevenlabs.io/v1/text-to-speech",{
+    method:"POST",
+    headers:{
+      "xi-api-key":apiKey,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      text:text,
+      model_id:"eleven_monolingual_v1",
+      voice_settings:{
+        stability:0.5,
+        similarity_boost:0.8
+      }
+    })
+  });
+
+  let blob=await res.blob();
+  let url=URL.createObjectURL(blob);
+
+  let audio=new Audio(url);
+  audio.play();
+
+  addHistory(text);
+  return;
+ }
+
+ // 🟢 FREE MODE (browser voice)
  let msg=new SpeechSynthesisUtterance(text);
  msg.voice=voices[document.getElementById("voice").value];
  msg.rate=document.getElementById("rate").value;
