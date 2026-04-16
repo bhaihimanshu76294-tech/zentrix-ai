@@ -11,45 +11,37 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-background: radial-gradient(circle at 10% 10%, #1e1b4b, #020617 70%);
+background: radial-gradient(circle at top,#1e1b4b,#020617 70%);
 color:white;
 padding:15px;
 }
 
-.header{text-align:center;margin-bottom:20px;}
 .logo{
-font-size:28px;
+text-align:center;
+font-size:26px;
 font-weight:700;
+margin-bottom:15px;
 background:linear-gradient(90deg,#8b5cf6,#6366f1);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-.main-box{
-background: linear-gradient(145deg,#0f172a,#020617);
-padding:18px;
-border-radius:18px;
-box-shadow:0 0 25px rgba(99,102,241,0.25);
-margin-bottom:20px;
+.box{
+background:#0f172a;
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
 }
 
-textarea{
+textarea,select,button{
 width:100%;
-height:90px;
-background:#111827;
-border:none;
-border-radius:12px;
-padding:12px;
-color:white;
-}
-
-select,button{
-width:100%;
-padding:10px;
 margin-top:8px;
+padding:10px;
 border-radius:10px;
 border:none;
 }
+
+textarea{background:#111827;color:white;}
 
 .generate{background:#6366f1;color:white;}
 .stop{background:red;color:white;}
@@ -63,69 +55,54 @@ gap:10px;
 
 .card{
 background:#0f172a;
-padding:14px;
-border-radius:14px;
-display:flex;
-gap:10px;
+padding:12px;
+border-radius:12px;
 cursor:pointer;
-}
-
-.icon{
-background:#111827;
-padding:10px;
-border-radius:10px;
-color:#6366f1;
 }
 
 .output{
 margin-top:15px;
 background:#020617;
 padding:12px;
-border-radius:12px;
-min-height:90px;
+border-radius:10px;
+min-height:80px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
 <div class="logo">⚡ Zentrix AI</div>
-</div>
 
-<div class="main-box">
+<div class="box">
 
-<textarea id="inputText" placeholder="Enter text..."></textarea>
+<textarea id="text" placeholder="Enter text..."></textarea>
 
-<select id="voiceSelect"></select>
+<select id="voice"></select>
 
 <select id="style">
 <option value="normal">Normal</option>
-<option value="deep">Deep</option>
 <option value="fast">Fast</option>
 <option value="slow">Slow</option>
-<option value="robot">Robot</option>
+<option value="deep">Deep</option>
 </select>
 
-<button class="generate" onclick="generateVoice()">Generate Voice</button>
-<button class="stop" onclick="stopVoice()">Stop</button>
-<button class="download" onclick="downloadAudio()">Download</button>
+<button class="generate" onclick="speak()">Generate Voice</button>
+<button class="stop" onclick="stop()">Stop</button>
+<button class="download" onclick="download()">Download</button>
 
 </div>
 
 <div class="grid">
-<div class="card" onclick="tool('script')"><div class="icon">✍️</div>Script</div>
-<div class="card" onclick="tool('caption')"><div class="icon">📝</div>Caption</div>
-<div class="card" onclick="tool('idea')"><div class="icon">💡</div>Idea</div>
-<div class="card" onclick="tool('title')"><div class="icon">🔥</div>Title</div>
-<div class="card" onclick="tool('hook')"><div class="icon">🧠</div>Hook</div>
-<div class="card" onclick="tool('hashtag')"><div class="icon">#</div>Hashtag</div>
-<div class="card" onclick="tool('rewrite')"><div class="icon">🔁</div>Rewrite</div>
-<div class="card" onclick="tool('story')"><div class="icon">📜</div>Story</div>
-<div class="card" onclick="tool('keyword')"><div class="icon">🎯</div>Keyword</div>
+<div class="card" onclick="tool('script')">✍️ Script</div>
+<div class="card" onclick="tool('caption')">📝 Caption</div>
+<div class="card" onclick="tool('idea')">💡 Idea</div>
+<div class="card" onclick="tool('title')">🔥 Title</div>
+<div class="card" onclick="tool('hashtag')"># Hashtag</div>
+<div class="card" onclick="tool('story')">📜 Story</div>
 </div>
 
-<div class="output" id="output">Result will appear here...</div>
+<div class="output" id="out">Result yaha dikhega...</div>
 
 <script>
 
@@ -134,71 +111,66 @@ let voices=[];
 
 speechSynthesis.onvoiceschanged=()=>{
 voices=speechSynthesis.getVoices();
-voiceSelect.innerHTML="";
+voice.innerHTML="";
 voices.forEach((v,i)=>{
-let opt=document.createElement("option");
-opt.value=i;
-opt.text=v.name;
-voiceSelect.appendChild(opt);
+let o=document.createElement("option");
+o.value=i;
+o.text=v.name;
+voice.appendChild(o);
 });
 };
 
-function generateVoice(){
-let msg=new SpeechSynthesisUtterance(inputText.value);
-msg.voice=voices[voiceSelect.value];
+function speak(){
+let msg=new SpeechSynthesisUtterance(text.value);
+msg.voice=voices[voice.value];
 
-let style=styleSelect.value;
-
-if(style=="deep"){msg.pitch=0.6;}
-if(style=="fast"){msg.rate=1.5;}
-if(style=="slow"){msg.rate=0.7;}
-if(style=="robot"){msg.pitch=0.3;}
+let s=style.value;
+if(s=="fast") msg.rate=1.5;
+if(s=="slow") msg.rate=0.7;
+if(s=="deep") msg.pitch=0.6;
 
 speechSynthesis.cancel();
 speechSynthesis.speak(msg);
 }
 
-function stopVoice(){
+function stop(){
 speechSynthesis.cancel();
 }
 
-/* DOWNLOAD BUTTON */
-function downloadAudio(){
-alert("📢 Screen record kar le bhai 😎\n— Himanshu");
+/* DOWNLOAD FUNNY */
+function download(){
+alert("😂 Download chahiye? \nScreen record kar le bhai!\n\n— Tumhara dost, Himanshu Gupta 😎");
 }
 
 /* FEATURES */
-function tool(type){
-let text=inputText.value;
-if(!text){output.innerHTML="Text likh bhai";return;}
+function tool(t){
+let txt=text.value;
+if(!txt){out.innerHTML="Pehle text likh bhai";return;}
 
-if(type=="script"){
-output.innerHTML="Hook: "+text+"...\nStory: Ye ek kahani hai...\nEnd: Follow karo!";
+if(t=="script"){
+out.innerHTML="Hook: "+txt+"...\nStory: Ye ek kahani hai...\nEnd: Follow karo!";
 }
-if(type=="caption"){
-output.innerHTML=text+"\n#viral #reels";
+
+if(t=="caption"){
+out.innerHTML=txt+"\n#viral #reels #fyp";
 }
-if(type=="idea"){
-output.innerHTML="Idea: "+text+" explain karo";
+
+if(t=="idea"){
+out.innerHTML="Idea: "+txt+" par video banao";
 }
-if(type=="title"){
-output.innerHTML=text+" | Must Watch 😱";
+
+if(t=="title"){
+out.innerHTML=txt+" | Must Watch 😱";
 }
-if(type=="hook"){
-output.innerHTML="Agar tumne ye nahi dekha to regret karoge!";
+
+if(t=="hashtag"){
+out.innerHTML="#viral #trend #shorts";
 }
-if(type=="hashtag"){
-output.innerHTML="#viral #fyp #trend";
+
+if(t=="story"){
+out.innerHTML="Ek din "+txt+" hua...";
 }
-if(type=="rewrite"){
-output.innerHTML=text.toUpperCase();
-}
-if(type=="story"){
-output.innerHTML="Ek din "+text+" hua...";
-}
-if(type=="keyword"){
-output.innerHTML=text+", viral, trending";
-}
+
 }
 
 </script>
