@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zentrix AI</title>
@@ -7,98 +7,68 @@
 <style>
 body{
  margin:0;
- font-family:'Segoe UI',sans-serif;
- background: radial-gradient(circle at top,#1e1b4b,#020617 70%);
+ font-family:sans-serif;
+ background: radial-gradient(circle at top,#1e1b4b,#020617);
  color:white;
 }
 
-/* NAV */
-nav{
- display:flex;
- justify-content:space-between;
- padding:15px;
-}
-
 .logo{
- font-size:20px;
+ text-align:center;
+ padding:15px;
  font-weight:bold;
- background:linear-gradient(45deg,#8b5cf6,#22d3ee);
- -webkit-background-clip:text;
- color:transparent;
+ font-size:20px;
+ color:#8b5cf6;
 }
 
-/* HERO */
 .hero{
  text-align:center;
- padding:40px 20px;
+ padding:20px;
 }
-.hero h1{font-size:28px;}
-.hero span{color:#22d3ee;}
 
-/* FEATURES GRID */
 .features{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:15px;
- padding:20px;
-}
-.box{
- background:rgba(255,255,255,0.05);
- padding:20px;
- border-radius:15px;
- transition:0.3s;
-}
-.box:hover{
- transform:scale(1.05);
- background:rgba(255,255,255,0.08);
-}
-
-/* TABS */
-.tabs{
- display:flex;
- overflow:auto;
+ gap:10px;
  padding:10px;
 }
-.tab{
- padding:10px 15px;
+
+.box{
  background:#0f172a;
- margin:5px;
+ padding:15px;
  border-radius:10px;
  cursor:pointer;
 }
-.active{background:#8b5cf6;}
 
-/* SECTIONS */
 .section{
  display:none;
- padding:15px;
+ padding:10px;
 }
+
 .show{display:block;}
 
-/* INPUTS */
 textarea,input,select{
  width:95%;
  padding:10px;
  margin-top:10px;
- border-radius:10px;
+ border-radius:8px;
  border:none;
 }
 
-/* BUTTONS */
 button{
  width:95%;
- padding:12px;
+ padding:10px;
  margin-top:10px;
  border:none;
- border-radius:10px;
+ border-radius:8px;
 }
+
 .generate{background:#8b5cf6;color:white;}
-.stop{background:#ef4444;color:white;}
-.copy{background:#22c55e;color:black;}
+.stop{background:red;color:white;}
+.copy{background:green;color:white;}
 
 .output{
- margin-top:10px;
  background:#0f172a;
+ margin-top:10px;
  padding:10px;
  border-radius:10px;
 }
@@ -107,45 +77,31 @@ button{
 
 <body>
 
-<nav>
 <div class="logo">⚡ Zentrix AI</div>
-</nav>
 
 <div class="hero">
-<h1>Create Content <span>10x Faster</span></h1>
-<p>All-in-one creator toolkit 🚀</p>
+<h2>Create Content 10x Faster</h2>
 </div>
 
 <!-- FEATURES -->
 <div class="features">
-<div class="box">🎤 Ultra-Realistic TTS<br><small>Generate voice</small></div>
-<div class="box">✍️ Script Generator<br><small>Create scripts</small></div>
-<div class="box">📝 Caption Generator<br><small>Catchy captions</small></div>
-<div class="box">🤖 AI Co-Creator<br><small>Content help</small></div>
-<div class="box">🎬 Video Ideas<br><small>Unlimited ideas</small></div>
-<div class="box">🎨 Brand Voice<br><small>Custom style</small></div>
-<div class="box">🧠 Hook Generator<br><small>Viral hooks</small></div>
-<div class="box">🔥 Title Generator<br><small>YouTube titles</small></div>
-<div class="box">💡 Content Ideas<br><small>Daily ideas</small></div>
-<div class="box">📱 Hashtag Tool<br><small>Trending tags</small></div>
-<div class="box">🎭 Tone Changer<br><small>Funny, sad</small></div>
-<div class="box">✂️ Short Script<br><small>Short content</small></div>
-<div class="box">🔁 Rewriter<br><small>Rewrite text</small></div>
-<div class="box">📜 Story Maker<br><small>Random story</small></div>
-<div class="box">🎙 Voice Styles<br><small>Different tones</small></div>
-<div class="box">📊 Tips Generator<br><small>Grow fast</small></div>
-<div class="box">📋 Copy Tool<br><small>One click copy</small></div>
-<div class="box">🔤 Text Tools<br><small>Upper/lower</small></div>
-<div class="box">⏱ Reading Time<br><small>Duration</small></div>
-<div class="box">🎯 Keywords<br><small>SEO words</small></div>
-</div>
+<div class="box" onclick="openTool('voice')">🎤 Voice</div>
+<div class="box" onclick="openTool('script')">✍️ Script</div>
+<div class="box" onclick="openTool('caption')">📝 Caption</div>
+<div class="box" onclick="openTool('idea')">💡 Ideas</div>
 
-<!-- TABS -->
-<div class="tabs">
-<div class="tab active" onclick="openTab('voice',this)">Voice</div>
-<div class="tab" onclick="openTab('script',this)">Script</div>
-<div class="tab" onclick="openTab('caption',this)">Caption</div>
-<div class="tab" onclick="openTab('idea',this)">Ideas</div>
+<div class="box" onclick="openTool('script')">🔥 Title</div>
+<div class="box" onclick="openTool('script')">🧠 Hook</div>
+<div class="box" onclick="openTool('caption')"># Hashtag</div>
+<div class="box" onclick="openTool('script')">🔁 Rewrite</div>
+
+<div class="box" onclick="openTool('script')">📜 Story</div>
+<div class="box" onclick="openTool('idea')">🎬 Video Idea</div>
+<div class="box" onclick="openTool('caption')">📊 Tips</div>
+<div class="box" onclick="openTool('script')">🔤 Text Tool</div>
+
+<div class="box" onclick="openTool('script')">⏱ Time</div>
+<div class="box" onclick="openTool('caption')">🎯 Keyword</div>
 </div>
 
 <!-- VOICE -->
@@ -154,10 +110,10 @@ button{
 <select id="style">
 <option value="normal">Normal</option>
 <option value="deep">Deep</option>
-<option value="soft">Soft</option>
 <option value="fast">Fast</option>
-<option value="slow">Story</option>
+<option value="slow">Slow</option>
 </select>
+
 <button class="generate" onclick="speak()">Generate</button>
 <button class="stop" onclick="stop()">Stop</button>
 </div>
@@ -165,7 +121,7 @@ button{
 <!-- SCRIPT -->
 <div id="script" class="section">
 <input id="topic" placeholder="Enter topic">
-<button class="generate" onclick="genScript()">Generate Script</button>
+<button class="generate" onclick="genScript()">Generate</button>
 <div id="scriptOut" class="output"></div>
 <button class="copy" onclick="copyText('scriptOut')">Copy</button>
 </div>
@@ -173,39 +129,37 @@ button{
 <!-- CAPTION -->
 <div id="caption" class="section">
 <input id="capInput" placeholder="Enter topic">
-<button class="generate" onclick="genCaption()">Generate Caption</button>
+<button class="generate" onclick="genCaption()">Generate</button>
 <div id="capOut" class="output"></div>
 <button class="copy" onclick="copyText('capOut')">Copy</button>
 </div>
 
-<!-- IDEAS -->
+<!-- IDEA -->
 <div id="idea" class="section">
 <select id="niche">
 <option>Motivation</option>
 <option>Horror</option>
 <option>Facts</option>
 </select>
-<button class="generate" onclick="genIdea()">Generate Idea</button>
+<button class="generate" onclick="genIdea()">Generate</button>
 <div id="ideaOut" class="output"></div>
 </div>
 
 <script>
 
-function openTab(id,el){
+function openTool(id){
  document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
  document.getElementById(id).classList.add('show');
- document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
- el.classList.add('active');
+ window.scrollTo(0,document.body.scrollHeight);
 }
 
 function speak(){
  let msg=new SpeechSynthesisUtterance(document.getElementById("text").value);
- let style=document.getElementById("style").value;
+ let s=document.getElementById("style").value;
 
- if(style=="deep"){msg.pitch=0.6;msg.rate=0.9;}
- if(style=="soft"){msg.pitch=1.5;}
- if(style=="fast"){msg.rate=1.4;}
- if(style=="slow"){msg.rate=0.7;}
+ if(s=="deep"){msg.pitch=0.6;}
+ if(s=="fast"){msg.rate=1.4;}
+ if(s=="slow"){msg.rate=0.7;}
 
  speechSynthesis.cancel();
  speechSynthesis.speak(msg);
@@ -216,35 +170,26 @@ function stop(){speechSynthesis.cancel();}
 function genScript(){
  let t=document.getElementById("topic").value;
  let arr=[
-  `Tumhe yakeen nahi hoga ${t} ke saath kya hua...`,
-  `${t} ka sach jo kisi ne nahi bataya...`,
-  `Aaj tum jaanoge ${t} ka hidden truth...`
+  "Tumhe yakeen nahi hoga "+t,
+  t+" ka sach kya hai",
+  "Aaj tum jaanoge "+t
  ];
- document.getElementById("scriptOut").innerText =
- arr[Math.floor(Math.random()*arr.length)];
+ document.getElementById("scriptOut").innerText=arr[Math.floor(Math.random()*3)];
 }
 
 function genCaption(){
  let t=document.getElementById("capInput").value;
  let arr=[
-  `${t} ne sab badal diya 🔥`,
-  `${t} jo tumne kabhi nahi dekha 😱`,
-  `Sach me ${t} powerful hai 💯`
+  t+" ne sab badal diya 🔥",
+  "Ye "+t+" viral hai 😱",
+  t+" powerful hai 💯"
  ];
- document.getElementById("capOut").innerText =
- arr[Math.floor(Math.random()*arr.length)];
+ document.getElementById("capOut").innerText=arr[Math.floor(Math.random()*3)];
 }
 
 function genIdea(){
- let ideas={
-  Motivation:["Never give up story","Success habits","Morning routine"],
-  Horror:["Haunted road story","Ghost mirror","2AM story"],
-  Facts:["Strange facts","Mind blowing facts","Space mystery"]
- };
- let n=document.getElementById("niche").value;
- let arr=ideas[n];
- document.getElementById("ideaOut").innerText =
- arr[Math.floor(Math.random()*arr.length)];
+ let arr=["Amazing idea","Viral reel idea","New concept"];
+ document.getElementById("ideaOut").innerText=arr[Math.floor(Math.random()*3)];
 }
 
 function copyText(id){
