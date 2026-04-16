@@ -66,6 +66,7 @@ background:#020617;
 padding:12px;
 border-radius:10px;
 min-height:80px;
+white-space:pre-line;
 }
 </style>
 </head>
@@ -75,7 +76,6 @@ min-height:80px;
 <div class="logo">⚡ Zentrix AI</div>
 
 <div class="box">
-
 <textarea id="text" placeholder="Enter text..."></textarea>
 
 <select id="voice"></select>
@@ -90,16 +90,31 @@ min-height:80px;
 <button class="generate" onclick="speak()">Generate Voice</button>
 <button class="stop" onclick="stop()">Stop</button>
 <button class="download" onclick="download()">Download</button>
-
 </div>
 
 <div class="grid">
+
 <div class="card" onclick="tool('script')">✍️ Script</div>
 <div class="card" onclick="tool('caption')">📝 Caption</div>
 <div class="card" onclick="tool('idea')">💡 Idea</div>
 <div class="card" onclick="tool('title')">🔥 Title</div>
+<div class="card" onclick="tool('hook')">🧠 Hook</div>
 <div class="card" onclick="tool('hashtag')"># Hashtag</div>
 <div class="card" onclick="tool('story')">📜 Story</div>
+<div class="card" onclick="tool('keyword')">🎯 Keyword</div>
+<div class="card" onclick="tool('intro')">🎬 Intro</div>
+<div class="card" onclick="tool('outro')">🏁 Outro</div>
+<div class="card" onclick="tool('short')">📱 Shorts</div>
+<div class="card" onclick="tool('viral')">🚀 Viral Line</div>
+<div class="card" onclick="tool('question')">❓ Question</div>
+<div class="card" onclick="tool('facts')">📊 Facts</div>
+<div class="card" onclick="tool('motivation')">💪 Motivation</div>
+<div class="card" onclick="tool('dialogue')">🎭 Dialogue</div>
+<div class="card" onclick="tool('comment')">💬 Comment Reply</div>
+<div class="card" onclick="tool('bio')">📌 Bio</div>
+<div class="card" onclick="tool('headline')">📰 Headline</div>
+<div class="card" onclick="tool('cta')">📢 CTA</div>
+
 </div>
 
 <div class="output" id="out">Result yaha dikhega...</div>
@@ -108,7 +123,6 @@ min-height:80px;
 
 /* VOICE */
 let voices=[];
-
 speechSynthesis.onvoiceschanged=()=>{
 voices=speechSynthesis.getVoices();
 voice.innerHTML="";
@@ -124,53 +138,48 @@ function speak(){
 let msg=new SpeechSynthesisUtterance(text.value);
 msg.voice=voices[voice.value];
 
-let s=style.value;
-if(s=="fast") msg.rate=1.5;
-if(s=="slow") msg.rate=0.7;
-if(s=="deep") msg.pitch=0.6;
+if(style.value=="fast") msg.rate=1.5;
+if(style.value=="slow") msg.rate=0.7;
+if(style.value=="deep") msg.pitch=0.6;
 
 speechSynthesis.cancel();
 speechSynthesis.speak(msg);
 }
 
-function stop(){
-speechSynthesis.cancel();
-}
+function stop(){speechSynthesis.cancel();}
 
-/* DOWNLOAD FUNNY */
+/* DOWNLOAD (NO EMAIL) */
 function download(){
-alert("😂 Download chahiye? \nScreen record kar le bhai!\n\n— Tumhara dost, Himanshu Gupta 😎");
+alert("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
 }
 
 /* FEATURES */
 function tool(t){
 let txt=text.value;
-if(!txt){out.innerHTML="Pehle text likh bhai";return;}
+if(!txt){out.innerHTML="Text likh bhai";return;}
 
-if(t=="script"){
-out.innerHTML="Hook: "+txt+"...\nStory: Ye ek kahani hai...\nEnd: Follow karo!";
+switch(t){
+case "script": out.innerHTML="Hook: "+txt+"...\nStory...\nEnd..."; break;
+case "caption": out.innerHTML=txt+"\n#viral #fyp"; break;
+case "idea": out.innerHTML="Idea: "+txt+" explain karo"; break;
+case "title": out.innerHTML=txt+" | Must Watch 😱"; break;
+case "hook": out.innerHTML="Agar ye nahi dekha to regret karoge!"; break;
+case "hashtag": out.innerHTML="#viral #trend #shorts"; break;
+case "story": out.innerHTML="Ek din "+txt+" hua..."; break;
+case "keyword": out.innerHTML=txt+", viral, trending"; break;
+case "intro": out.innerHTML="Welcome guys! Aaj hum baat karenge "+txt; break;
+case "outro": out.innerHTML="Thanks for watching! Follow karo"; break;
+case "short": out.innerHTML="Short idea: "+txt; break;
+case "viral": out.innerHTML="Ye cheez sabko nahi pata! "+txt; break;
+case "question": out.innerHTML="Kya aap jante ho "+txt+"?"; break;
+case "facts": out.innerHTML="Fact: "+txt; break;
+case "motivation": out.innerHTML="Kabhi give up mat karo! "+txt; break;
+case "dialogue": out.innerHTML="Dialogue: "+txt; break;
+case "comment": out.innerHTML="Nice bro! "+txt; break;
+case "bio": out.innerHTML="Bio: "+txt; break;
+case "headline": out.innerHTML="Breaking: "+txt; break;
+case "cta": out.innerHTML="Like share subscribe! "+txt; break;
 }
-
-if(t=="caption"){
-out.innerHTML=txt+"\n#viral #reels #fyp";
-}
-
-if(t=="idea"){
-out.innerHTML="Idea: "+txt+" par video banao";
-}
-
-if(t=="title"){
-out.innerHTML=txt+" | Must Watch 😱";
-}
-
-if(t=="hashtag"){
-out.innerHTML="#viral #trend #shorts";
-}
-
-if(t=="story"){
-out.innerHTML="Ek din "+txt+" hua...";
-}
-
 }
 
 </script>
