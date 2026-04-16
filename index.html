@@ -12,33 +12,71 @@ body{
  color:white;
 }
 
+/* HEADER */
 .logo{
  text-align:center;
  padding:15px;
+ font-size:22px;
  font-weight:bold;
- font-size:20px;
  color:#8b5cf6;
 }
 
-.hero{
- text-align:center;
- padding:20px;
+/* TTS BOX */
+.tts{
+ background:#0f172a;
+ margin:10px;
+ padding:15px;
+ border-radius:15px;
 }
 
+textarea,select,input{
+ width:100%;
+ padding:12px;
+ margin-top:10px;
+ border-radius:10px;
+ border:none;
+}
+
+button{
+ width:100%;
+ padding:12px;
+ margin-top:10px;
+ border:none;
+ border-radius:10px;
+ font-weight:bold;
+}
+
+.generate{background:linear-gradient(90deg,#7c3aed,#6366f1);color:white;}
+.stop{background:red;color:white;}
+.copy{background:green;color:white;}
+
+/* FEATURES GRID */
 .features{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:10px;
+ gap:12px;
  padding:10px;
 }
 
 .box{
  background:#0f172a;
  padding:15px;
- border-radius:10px;
+ border-radius:15px;
  cursor:pointer;
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-weight:bold;
 }
 
+.icon{
+ background:#1e293b;
+ padding:10px;
+ border-radius:10px;
+ color:#60a5fa;
+}
+
+/* SECTIONS */
 .section{
  display:none;
  padding:10px;
@@ -46,30 +84,10 @@ body{
 
 .show{display:block;}
 
-textarea,input,select{
- width:95%;
- padding:10px;
- margin-top:10px;
- border-radius:8px;
- border:none;
-}
-
-button{
- width:95%;
- padding:10px;
- margin-top:10px;
- border:none;
- border-radius:8px;
-}
-
-.generate{background:#8b5cf6;color:white;}
-.stop{background:red;color:white;}
-.copy{background:green;color:white;}
-
 .output{
  background:#0f172a;
- margin-top:10px;
  padding:10px;
+ margin-top:10px;
  border-radius:10px;
 }
 </style>
@@ -79,34 +97,10 @@ button{
 
 <div class="logo">⚡ Zentrix AI</div>
 
-<div class="hero">
-<h2>Create Content 10x Faster</h2>
-</div>
+<!-- 🔥 TEXT TO SPEECH (TOP) -->
+<div class="tts">
+<textarea id="text" placeholder="Enter text..."></textarea>
 
-<!-- FEATURES -->
-<div class="features">
-<div class="box" onclick="openTool('voice')">🎤 Voice</div>
-<div class="box" onclick="openTool('script')">✍️ Script</div>
-<div class="box" onclick="openTool('caption')">📝 Caption</div>
-<div class="box" onclick="openTool('idea')">💡 Ideas</div>
-
-<div class="box" onclick="openTool('script')">🔥 Title</div>
-<div class="box" onclick="openTool('script')">🧠 Hook</div>
-<div class="box" onclick="openTool('caption')"># Hashtag</div>
-<div class="box" onclick="openTool('script')">🔁 Rewrite</div>
-
-<div class="box" onclick="openTool('script')">📜 Story</div>
-<div class="box" onclick="openTool('idea')">🎬 Video Idea</div>
-<div class="box" onclick="openTool('caption')">📊 Tips</div>
-<div class="box" onclick="openTool('script')">🔤 Text Tool</div>
-
-<div class="box" onclick="openTool('script')">⏱ Time</div>
-<div class="box" onclick="openTool('caption')">🎯 Keyword</div>
-</div>
-
-<!-- VOICE -->
-<div id="voice" class="section show">
-<textarea id="text" placeholder="Enter text"></textarea>
 <select id="style">
 <option value="normal">Normal</option>
 <option value="deep">Deep</option>
@@ -118,7 +112,60 @@ button{
 <button class="stop" onclick="stop()">Stop</button>
 </div>
 
-<!-- SCRIPT -->
+<!-- 🔥 FEATURES -->
+<div class="features">
+
+<div class="box" onclick="openTool('script')">
+<span class="icon">✍️</span> Script
+</div>
+
+<div class="box" onclick="openTool('caption')">
+<span class="icon">📝</span> Caption
+</div>
+
+<div class="box" onclick="openTool('idea')">
+<span class="icon">💡</span> Ideas
+</div>
+
+<div class="box" onclick="openTool('title')">
+<span class="icon">🔥</span> Title
+</div>
+
+<div class="box" onclick="openTool('hook')">
+<span class="icon">🧠</span> Hook
+</div>
+
+<div class="box" onclick="openTool('hashtag')">
+<span class="icon">#️⃣</span> Hashtag
+</div>
+
+<div class="box" onclick="openTool('rewrite')">
+<span class="icon">🔁</span> Rewrite
+</div>
+
+<div class="box" onclick="openTool('story')">
+<span class="icon">📜</span> Story
+</div>
+
+<div class="box" onclick="openTool('idea')">
+<span class="icon">🎬</span> Video Idea
+</div>
+
+<div class="box" onclick="openTool('tips')">
+<span class="icon">📊</span> Tips
+</div>
+
+<div class="box" onclick="openTool('texttool')">
+<span class="icon">🔤</span> Text Tool
+</div>
+
+<div class="box" onclick="openTool('keyword')">
+<span class="icon">🎯</span> Keyword
+</div>
+
+</div>
+
+<!-- 🔥 SCRIPT -->
 <div id="script" class="section">
 <input id="topic" placeholder="Enter topic">
 <button class="generate" onclick="genScript()">Generate</button>
@@ -136,13 +183,58 @@ button{
 
 <!-- IDEA -->
 <div id="idea" class="section">
-<select id="niche">
-<option>Motivation</option>
-<option>Horror</option>
-<option>Facts</option>
-</select>
 <button class="generate" onclick="genIdea()">Generate</button>
 <div id="ideaOut" class="output"></div>
+</div>
+
+<!-- TITLE -->
+<div id="title" class="section">
+<button class="generate" onclick="genTitle()">Generate</button>
+<div id="titleOut" class="output"></div>
+</div>
+
+<!-- HOOK -->
+<div id="hook" class="section">
+<button class="generate" onclick="genHook()">Generate</button>
+<div id="hookOut" class="output"></div>
+</div>
+
+<!-- HASHTAG -->
+<div id="hashtag" class="section">
+<button class="generate" onclick="genTag()">Generate</button>
+<div id="tagOut" class="output"></div>
+</div>
+
+<!-- REWRITE -->
+<div id="rewrite" class="section">
+<textarea id="rewriteInput" placeholder="Enter text"></textarea>
+<button class="generate" onclick="rewrite()">Rewrite</button>
+<div id="rewriteOut" class="output"></div>
+</div>
+
+<!-- STORY -->
+<div id="story" class="section">
+<button class="generate" onclick="genStory()">Generate</button>
+<div id="storyOut" class="output"></div>
+</div>
+
+<!-- TIPS -->
+<div id="tips" class="section">
+<button class="generate" onclick="genTips()">Generate</button>
+<div id="tipsOut" class="output"></div>
+</div>
+
+<!-- TEXT TOOL -->
+<div id="texttool" class="section">
+<textarea id="toolText"></textarea>
+<button class="generate" onclick="upper()">UPPERCASE</button>
+<button class="generate" onclick="lower()">lowercase</button>
+</div>
+
+<!-- KEYWORD -->
+<div id="keyword" class="section">
+<button class="generate" onclick="genKeyword()">Generate</button>
+<div id="keyOut" class="output"></div>
 </div>
 
 <script>
@@ -153,6 +245,7 @@ function openTool(id){
  window.scrollTo(0,document.body.scrollHeight);
 }
 
+/* VOICE */
 function speak(){
  let msg=new SpeechSynthesisUtterance(document.getElementById("text").value);
  let s=document.getElementById("style").value;
@@ -167,29 +260,58 @@ function speak(){
 
 function stop(){speechSynthesis.cancel();}
 
+/* GENERATORS */
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
 function genScript(){
- let t=document.getElementById("topic").value;
- let arr=[
-  "Tumhe yakeen nahi hoga "+t,
-  t+" ka sach kya hai",
-  "Aaj tum jaanoge "+t
- ];
- document.getElementById("scriptOut").innerText=arr[Math.floor(Math.random()*3)];
+ document.getElementById("scriptOut").innerText=rand(["Amazing story","Shocking truth","Viral script"]);
 }
 
 function genCaption(){
- let t=document.getElementById("capInput").value;
- let arr=[
-  t+" ne sab badal diya 🔥",
-  "Ye "+t+" viral hai 😱",
-  t+" powerful hai 💯"
- ];
- document.getElementById("capOut").innerText=arr[Math.floor(Math.random()*3)];
+ document.getElementById("capOut").innerText=rand(["🔥 Viral caption","#Trending now","Must watch"]);
 }
 
 function genIdea(){
- let arr=["Amazing idea","Viral reel idea","New concept"];
- document.getElementById("ideaOut").innerText=arr[Math.floor(Math.random()*3)];
+ document.getElementById("ideaOut").innerText=rand(["Reel idea","Story idea","Content idea"]);
+}
+
+function genTitle(){
+ document.getElementById("titleOut").innerText=rand(["Top secret 😱","Must watch 🔥"]);
+}
+
+function genHook(){
+ document.getElementById("hookOut").innerText=rand(["Wait till end...","You won't believe this"]);
+}
+
+function genTag(){
+ document.getElementById("tagOut").innerText="#viral #reels #fyp";
+}
+
+function rewrite(){
+ let t=document.getElementById("rewriteInput").value;
+ document.getElementById("rewriteOut").innerText="Better: "+t;
+}
+
+function genStory(){
+ document.getElementById("storyOut").innerText="Once upon a time...";
+}
+
+function genTips(){
+ document.getElementById("tipsOut").innerText="Post daily & use hooks";
+}
+
+function upper(){
+ let t=document.getElementById("toolText").value;
+ document.getElementById("toolText").value=t.toUpperCase();
+}
+
+function lower(){
+ let t=document.getElementById("toolText").value;
+ document.getElementById("toolText").value=t.toLowerCase();
+}
+
+function genKeyword(){
+ document.getElementById("keyOut").innerText="viral, reels, trending";
 }
 
 function copyText(id){
