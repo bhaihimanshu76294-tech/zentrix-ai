@@ -8,27 +8,31 @@
 <style>
 body{
 margin:0;
-font-family:Arial;
-background: radial-gradient(circle at top,#1a1a3d,#000);
+font-family: 'Poppins', sans-serif;
+background: radial-gradient(circle at top,#1e1b4b,#020617 70%);
 color:white;
 }
 
 h1{
 text-align:center;
 padding:20px;
-color:#8a6cff;
+font-size:28px;
+background: linear-gradient(90deg,#8b5cf6,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .container{
 padding:15px;
 }
 
-.card{
-background:#11182c;
+/* TTS BOX */
+.tts-box{
+background: linear-gradient(145deg,#0f172a,#020617);
 padding:15px;
-border-radius:15px;
-margin-bottom:15px;
-box-shadow:0 0 10px rgba(0,0,0,0.5);
+border-radius:16px;
+box-shadow:0 0 20px rgba(99,102,241,0.2);
+margin-bottom:20px;
 }
 
 textarea{
@@ -37,6 +41,7 @@ height:80px;
 border-radius:10px;
 border:none;
 padding:10px;
+font-size:15px;
 }
 
 button{
@@ -46,10 +51,11 @@ margin-top:10px;
 border:none;
 border-radius:10px;
 font-size:16px;
+cursor:pointer;
 }
 
 .generate{
-background:linear-gradient(90deg,#7b5cff,#9d7bff);
+background: linear-gradient(90deg,#7c3aed,#6366f1);
 color:white;
 }
 
@@ -58,26 +64,44 @@ background:red;
 color:white;
 }
 
+/* FEATURES GRID */
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px;
+gap:12px;
 }
 
 .feature{
-background:#0f172a;
+background: linear-gradient(145deg,#0f172a,#020617);
 padding:15px;
-border-radius:12px;
-text-align:center;
+border-radius:14px;
+display:flex;
+align-items:center;
+gap:10px;
 cursor:pointer;
+transition:0.3s;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
 }
 
-.output{
-background:#000;
+.feature:hover{
+transform:scale(1.05);
+box-shadow:0 0 20px rgba(99,102,241,0.4);
+}
+
+.icon{
+background:#111827;
 padding:10px;
-margin-top:10px;
 border-radius:10px;
-min-height:60px;
+color:#6366f1;
+}
+
+/* OUTPUT */
+.output{
+margin-top:20px;
+background:#000;
+padding:12px;
+border-radius:10px;
+min-height:80px;
 }
 </style>
 </head>
@@ -89,7 +113,7 @@ min-height:60px;
 <div class="container">
 
 <!-- TEXT TO SPEECH -->
-<div class="card">
+<div class="tts-box">
 <textarea id="text" placeholder="Enter text..."></textarea>
 
 <button class="generate" onclick="speak()">Generate Voice</button>
@@ -100,15 +124,41 @@ min-height:60px;
 <!-- FEATURES -->
 <div class="grid">
 
-<div class="feature" onclick="runFeature('script')">✍ Script</div>
-<div class="feature" onclick="runFeature('caption')">📝 Caption</div>
-<div class="feature" onclick="runFeature('idea')">💡 Idea</div>
-<div class="feature" onclick="runFeature('title')">🔥 Title</div>
-<div class="feature" onclick="runFeature('hook')">🧠 Hook</div>
-<div class="feature" onclick="runFeature('hashtag')"># Hashtag</div>
-<div class="feature" onclick="runFeature('rewrite')">🔁 Rewrite</div>
-<div class="feature" onclick="runFeature('story')">📜 Story</div>
-<div class="feature" onclick="runFeature('keyword')">🎯 Keyword</div>
+<div class="feature" onclick="runFeature('script')">
+<div class="icon">✍</div> Script
+</div>
+
+<div class="feature" onclick="runFeature('caption')">
+<div class="icon">📝</div> Caption
+</div>
+
+<div class="feature" onclick="runFeature('idea')">
+<div class="icon">💡</div> Idea
+</div>
+
+<div class="feature" onclick="runFeature('title')">
+<div class="icon">🔥</div> Title
+</div>
+
+<div class="feature" onclick="runFeature('hook')">
+<div class="icon">🧠</div> Hook
+</div>
+
+<div class="feature" onclick="runFeature('hashtag')">
+<div class="icon">#</div> Hashtag
+</div>
+
+<div class="feature" onclick="runFeature('rewrite')">
+<div class="icon">🔁</div> Rewrite
+</div>
+
+<div class="feature" onclick="runFeature('story')">
+<div class="icon">📜</div> Story
+</div>
+
+<div class="feature" onclick="runFeature('keyword')">
+<div class="icon">🎯</div> Keyword
+</div>
 
 </div>
 
@@ -129,55 +179,53 @@ function stopVoice(){
 synth.cancel();
 }
 
-// DOWNLOAD (record trick)
 function downloadAudio(){
-alert("Browser voice direct download possible nahi 😅\nScreen Recorder use karo bhai");
+alert("Direct download possible nahi hai 😅 Screen record use karo");
 }
 
-// FEATURES LOGIC
 function runFeature(type){
 let text = document.getElementById("text").value;
 let output = document.getElementById("output");
 
 if(!text){
-output.innerHTML="⚠️ Pehle text likh bhai";
+output.innerHTML="⚠️ Pehle text likh";
 return;
 }
 
 if(type=="script"){
-output.innerHTML="🎬 Script:\nEk horror kahani...\nRaat ke 2 baje darwaza khula...";
+output.innerHTML="🎬 Script:\nHook: "+text+"...\nMain: Ye ek kahani hai...\nEnd: Follow karo!";
 }
 
 if(type=="caption"){
-output.innerHTML="📸 Caption:\n"+text+" 😍🔥\n#viral #trending #reels";
+output.innerHTML="📸 "+text+" 🔥\n#viral #reels #trending";
 }
 
 if(type=="idea"){
-output.innerHTML="💡 Idea:\nYouTube Shorts idea: "+text+" explain karo";
+output.innerHTML="💡 Idea:\n"+text+" par reel banao";
 }
 
 if(type=="title"){
-output.innerHTML="🔥 Title:\n"+text+" | Must Watch 😱";
+output.innerHTML="🔥 "+text+" | Must Watch 😱";
 }
 
 if(type=="hook"){
-output.innerHTML="🧠 Hook:\nAgar tum ye nahi dekhoge to regret karoge...";
+output.innerHTML="🧠 Agar tumne ye nahi dekha to regret karoge!";
 }
 
 if(type=="hashtag"){
-output.innerHTML="#viral #fyp #trend #reels #youtube";
+output.innerHTML="#viral #fyp #trend #shorts";
 }
 
 if(type=="rewrite"){
-output.innerHTML="🔁 Rewrite:\n"+text.split("").reverse().join("");
+output.innerHTML=text.toUpperCase();
 }
 
 if(type=="story"){
-output.innerHTML="📖 Story:\nEk ladka tha... "+text+" aur fir sab badal gaya...";
+output.innerHTML="📖 Ek kahani: "+text+" aur sab badal gaya...";
 }
 
 if(type=="keyword"){
-output.innerHTML="🎯 Keywords:\n"+text+", viral, trending";
+output.innerHTML="🎯 "+text+", viral, trending";
 }
 }
 </script>
