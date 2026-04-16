@@ -1,109 +1,207 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zentrix AI</title>
 
-/* VOICE SYSTEM */
-let voices = [];
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-function loadVoices(){
- voices = speechSynthesis.getVoices();
- let select = document.getElementById("voiceSelect");
- if(!select) return;
- select.innerHTML = "";
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
- voices.forEach((v,i)=>{
-  let option = document.createElement("option");
-  option.value = i;
-  option.text = v.name;
-  select.appendChild(option);
- });
+body{
+background: radial-gradient(circle at 10% 10%, #1e1b4b, #020617 70%);
+color:white;
+padding:15px;
 }
 
-speechSynthesis.onvoiceschanged = loadVoices;
+.header{text-align:center;margin-bottom:20px;}
+.logo{
+font-size:28px;
+font-weight:700;
+background:linear-gradient(90deg,#8b5cf6,#6366f1);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.main-box{
+background: linear-gradient(145deg,#0f172a,#020617);
+padding:18px;
+border-radius:18px;
+box-shadow:0 0 25px rgba(99,102,241,0.25);
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:90px;
+background:#111827;
+border:none;
+border-radius:12px;
+padding:12px;
+color:white;
+}
+
+select,button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:10px;
+border:none;
+}
+
+.generate{background:#6366f1;color:white;}
+.stop{background:red;color:white;}
+.download{background:#22c55e;color:white;}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.card{
+background:#0f172a;
+padding:14px;
+border-radius:14px;
+display:flex;
+gap:10px;
+cursor:pointer;
+}
+
+.icon{
+background:#111827;
+padding:10px;
+border-radius:10px;
+color:#6366f1;
+}
+
+.output{
+margin-top:15px;
+background:#020617;
+padding:12px;
+border-radius:12px;
+min-height:90px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<div class="logo">⚡ Zentrix AI</div>
+</div>
+
+<div class="main-box">
+
+<textarea id="inputText" placeholder="Enter text..."></textarea>
+
+<select id="voiceSelect"></select>
+
+<select id="style">
+<option value="normal">Normal</option>
+<option value="deep">Deep</option>
+<option value="fast">Fast</option>
+<option value="slow">Slow</option>
+<option value="robot">Robot</option>
+</select>
+
+<button class="generate" onclick="generateVoice()">Generate Voice</button>
+<button class="stop" onclick="stopVoice()">Stop</button>
+<button class="download" onclick="downloadAudio()">Download</button>
+
+</div>
+
+<div class="grid">
+<div class="card" onclick="tool('script')"><div class="icon">✍️</div>Script</div>
+<div class="card" onclick="tool('caption')"><div class="icon">📝</div>Caption</div>
+<div class="card" onclick="tool('idea')"><div class="icon">💡</div>Idea</div>
+<div class="card" onclick="tool('title')"><div class="icon">🔥</div>Title</div>
+<div class="card" onclick="tool('hook')"><div class="icon">🧠</div>Hook</div>
+<div class="card" onclick="tool('hashtag')"><div class="icon">#</div>Hashtag</div>
+<div class="card" onclick="tool('rewrite')"><div class="icon">🔁</div>Rewrite</div>
+<div class="card" onclick="tool('story')"><div class="icon">📜</div>Story</div>
+<div class="card" onclick="tool('keyword')"><div class="icon">🎯</div>Keyword</div>
+</div>
+
+<div class="output" id="output">Result will appear here...</div>
+
+<script>
+
+/* VOICE */
+let voices=[];
+
+speechSynthesis.onvoiceschanged=()=>{
+voices=speechSynthesis.getVoices();
+voiceSelect.innerHTML="";
+voices.forEach((v,i)=>{
+let opt=document.createElement("option");
+opt.value=i;
+opt.text=v.name;
+voiceSelect.appendChild(opt);
+});
+};
 
 function generateVoice(){
- let text = document.getElementById("inputText").value;
- let voiceIndex = document.getElementById("voiceSelect").value;
- let style = document.getElementById("style").value;
+let msg=new SpeechSynthesisUtterance(inputText.value);
+msg.voice=voices[voiceSelect.value];
 
- let msg = new SpeechSynthesisUtterance(text);
- msg.voice = voices[voiceIndex];
+let style=styleSelect.value;
 
- if(style=="deep"){ msg.pitch = 0.6; }
- if(style=="fast"){ msg.rate = 1.5; }
- if(style=="slow"){ msg.rate = 0.7; }
- if(style=="robot"){ msg.pitch = 0.3; msg.rate = 1.2; }
+if(style=="deep"){msg.pitch=0.6;}
+if(style=="fast"){msg.rate=1.5;}
+if(style=="slow"){msg.rate=0.7;}
+if(style=="robot"){msg.pitch=0.3;}
 
- speechSynthesis.cancel();
- speechSynthesis.speak(msg);
+speechSynthesis.cancel();
+speechSynthesis.speak(msg);
 }
 
 function stopVoice(){
- speechSynthesis.cancel();
+speechSynthesis.cancel();
 }
 
+/* DOWNLOAD BUTTON */
+function downloadAudio(){
+alert("📢 Screen record kar le bhai 😎\n— Himanshu");
+}
 
-/* FEATURES FIX (MAIN PART) */
+/* FEATURES */
 function tool(type){
- let text = document.getElementById("inputText").value.trim();
- let out = document.getElementById("output");
+let text=inputText.value;
+if(!text){output.innerHTML="Text likh bhai";return;}
 
- if(!text){
-  out.innerHTML="⚠️ Pehle text likh";
-  return;
- }
-
- switch(type){
-
-  case "script":
-   out.innerHTML =
-   "🎬 Hook:\nKya aap jante ho " + text + "?\n\n" +
-   "📖 Story:\nAaj hum baat karenge " + text + " ke bare me...\n\n" +
-   "🎯 Ending:\nFollow karo aur aur videos dekho!";
-  break;
-
-  case "caption":
-   out.innerHTML =
-   "🔥 " + text + "\n\nFollow for more 🔥\n#viral #reels #fyp #trend";
-  break;
-
-  case "idea":
-   out.innerHTML =
-   "💡 Idea:\nEk reel banao jisme tum " + text + " ko simple tarike se samjhao.";
-  break;
-
-  case "title":
-   out.innerHTML =
-   "🔥 " + text + " | Aisa Sach Jo Sabko Pata Nahi 😱";
-  break;
-
-  case "hook":
-   out.innerHTML =
-   "🧠 Agar tumne ye nahi dekha to tum bahut kuch miss kar rahe ho!";
-  break;
-
-  case "hashtag":
-   out.innerHTML =
-   "#viral #trend #fyp #reels #shorts #explore #video";
-  break;
-
-  case "rewrite":
-   out.innerHTML =
-   "🔁 Simple version:\n" + text + " ko asaan shabdon me samjha ja sakta hai.";
-  break;
-
-  case "story":
-   out.innerHTML =
-   "📖 Ek kahani:\nEk din " + text + " hua... aur uske baad sab badal gaya...";
-  break;
-
-  case "keyword":
-   out.innerHTML =
-   "🎯 Keywords:\n" + text + ", viral, trending, reels, content";
-  break;
-
-  default:
-   out.innerHTML = "Error";
- }
-
+if(type=="script"){
+output.innerHTML="Hook: "+text+"...\nStory: Ye ek kahani hai...\nEnd: Follow karo!";
+}
+if(type=="caption"){
+output.innerHTML=text+"\n#viral #reels";
+}
+if(type=="idea"){
+output.innerHTML="Idea: "+text+" explain karo";
+}
+if(type=="title"){
+output.innerHTML=text+" | Must Watch 😱";
+}
+if(type=="hook"){
+output.innerHTML="Agar tumne ye nahi dekha to regret karoge!";
+}
+if(type=="hashtag"){
+output.innerHTML="#viral #fyp #trend";
+}
+if(type=="rewrite"){
+output.innerHTML=text.toUpperCase();
+}
+if(type=="story"){
+output.innerHTML="Ek din "+text+" hua...";
+}
+if(type=="keyword"){
+output.innerHTML=text+", viral, trending";
+}
 }
 
 </script>
+
+</body>
+</html>
