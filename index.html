@@ -1,219 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zentrix AI</title>
 
 <style>
 body{
- margin:0;
- font-family:sans-serif;
- background: radial-gradient(circle at top,#1e1b4b,#020617);
- color:white;
+margin:0;
+font-family:Arial;
+background: radial-gradient(circle at top,#1a1a3d,#000);
+color:white;
 }
 
-.logo{
- text-align:center;
- padding:15px;
- font-size:22px;
- font-weight:bold;
- color:#8b5cf6;
+h1{
+text-align:center;
+padding:20px;
+color:#8a6cff;
 }
 
-.tts,.card{
- background:#0f172a;
- margin:10px;
- padding:15px;
- border-radius:15px;
+.container{
+padding:15px;
 }
 
-textarea,input,select{
- width:100%;
- padding:12px;
- margin-top:10px;
- border-radius:10px;
- border:none;
+.card{
+background:#11182c;
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 0 10px rgba(0,0,0,0.5);
+}
+
+textarea{
+width:100%;
+height:80px;
+border-radius:10px;
+border:none;
+padding:10px;
 }
 
 button{
- width:100%;
- padding:12px;
- margin-top:10px;
- border:none;
- border-radius:10px;
- font-weight:bold;
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+font-size:16px;
 }
 
-.generate{background:linear-gradient(90deg,#7c3aed,#6366f1);color:white;}
-.stop{background:red;color:white;}
-.copy{background:green;color:white;}
-
-.features{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:10px;
- padding:10px;
+.generate{
+background:linear-gradient(90deg,#7b5cff,#9d7bff);
+color:white;
 }
 
-.box{
- background:#0f172a;
- padding:15px;
- border-radius:12px;
- cursor:pointer;
- display:flex;
- gap:10px;
- align-items:center;
+.stop{
+background:red;
+color:white;
 }
 
-.icon{
- background:#1e293b;
- padding:10px;
- border-radius:10px;
- color:#60a5fa;
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
 }
 
-.section{display:none;padding:10px;}
-.show{display:block;}
+.feature{
+background:#0f172a;
+padding:15px;
+border-radius:12px;
+text-align:center;
+cursor:pointer;
+}
 
 .output{
- background:#0f172a;
- padding:10px;
- margin-top:10px;
- border-radius:10px;
-}
-
-video{
- width:100%;
- margin-top:10px;
- border-radius:10px;
+background:#000;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+min-height:60px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="logo">⚡ Zentrix AI</div>
+<h1>⚡ Zentrix AI</h1>
 
-<!-- VOICE -->
-<div class="tts">
+<div class="container">
+
+<!-- TEXT TO SPEECH -->
+<div class="card">
 <textarea id="text" placeholder="Enter text..."></textarea>
+
 <button class="generate" onclick="speak()">Generate Voice</button>
-<button class="stop" onclick="speechSynthesis.cancel()">Stop</button>
+<button class="stop" onclick="stopVoice()">Stop</button>
+<button onclick="downloadAudio()">Download</button>
 </div>
 
 <!-- FEATURES -->
-<div class="features">
-<div class="box" onclick="openTool('script')"><span class="icon">✍️</span>Script</div>
-<div class="box" onclick="openTool('caption')"><span class="icon">📝</span>Caption</div>
-<div class="box" onclick="openTool('idea')"><span class="icon">💡</span>Idea</div>
-<div class="box" onclick="openTool('title')"><span class="icon">🔥</span>Title</div>
-<div class="box" onclick="openTool('hook')"><span class="icon">🧠</span>Hook</div>
-<div class="box" onclick="openTool('hashtag')"><span class="icon">#️⃣</span>Hashtag</div>
-<div class="box" onclick="openTool('rewrite')"><span class="icon">🔁</span>Rewrite</div>
-<div class="box" onclick="openTool('story')"><span class="icon">📜</span>Story</div>
-<div class="box" onclick="openTool('keyword')"><span class="icon">🎯</span>Keyword</div>
+<div class="grid">
+
+<div class="feature" onclick="runFeature('script')">✍ Script</div>
+<div class="feature" onclick="runFeature('caption')">📝 Caption</div>
+<div class="feature" onclick="runFeature('idea')">💡 Idea</div>
+<div class="feature" onclick="runFeature('title')">🔥 Title</div>
+<div class="feature" onclick="runFeature('hook')">🧠 Hook</div>
+<div class="feature" onclick="runFeature('hashtag')"># Hashtag</div>
+<div class="feature" onclick="runFeature('rewrite')">🔁 Rewrite</div>
+<div class="feature" onclick="runFeature('story')">📜 Story</div>
+<div class="feature" onclick="runFeature('keyword')">🎯 Keyword</div>
+
 </div>
 
-<!-- SCRIPT -->
-<div id="script" class="section card">
-<input id="topic" placeholder="Enter topic">
-<button class="generate" onclick="genScript()">Generate</button>
-<div id="scriptOut" class="output"></div>
+<div class="output" id="output"></div>
+
 </div>
-
-<!-- CAPTION (AUTO FEEL) -->
-<div id="caption" class="section card">
-<input type="file" accept="video/*" id="videoInput">
-<textarea id="capText" placeholder="Optional text..."></textarea>
-
-<button class="generate" onclick="genCaption()">Generate Caption</button>
-
-<video id="videoPreview" controls></video>
-
-<div id="capOut" class="output"></div>
-<button class="copy" onclick="copy('capOut')">Copy</button>
-</div>
-
-<!-- OTHER -->
-<div id="idea" class="section card"><button onclick="idea()">Generate</button><div id="ideaOut" class="output"></div></div>
-<div id="title" class="section card"><button onclick="titleGen()">Generate</button><div id="titleOut" class="output"></div></div>
-<div id="hook" class="section card"><button onclick="hookGen()">Generate</button><div id="hookOut" class="output"></div></div>
-<div id="hashtag" class="section card"><button onclick="tag()">Generate</button><div id="tagOut" class="output"></div></div>
-
-<div id="rewrite" class="section card">
-<textarea id="rewriteInput"></textarea>
-<button onclick="rewrite()">Rewrite</button>
-<div id="rewriteOut" class="output"></div>
-</div>
-
-<div id="story" class="section card"><button onclick="story()">Generate</button><div id="storyOut" class="output"></div></div>
-<div id="keyword" class="section card"><button onclick="keyword()">Generate</button><div id="keyOut" class="output"></div></div>
 
 <script>
+let synth = window.speechSynthesis;
 
-/* NAV */
-function openTool(id){
- document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));
- document.getElementById(id).classList.add('show');
-}
-
-/* VOICE */
 function speak(){
- let msg=new SpeechSynthesisUtterance(text.value);
- speechSynthesis.speak(msg);
+let text = document.getElementById("text").value;
+let utter = new SpeechSynthesisUtterance(text);
+synth.speak(utter);
 }
 
-/* SCRIPT SMART */
-function genScript(){
- let t=topic.value.toLowerCase();
- let out="";
-
- if(t.includes("horror")){
-  out="रात के 2 बजे... अचानक दरवाज़ा खुद खुल गया...";
- }else if(t.includes("motivation")){
-  out="अगर जिंदगी बदलनी है... तो आज से मेहनत शुरू करो...";
- }else{
-  out="आज हम बात करेंगे "+t+" के बारे में...";
- }
-
- scriptOut.innerText=out;
+function stopVoice(){
+synth.cancel();
 }
 
-/* CAPTION JUGAAD */
-function genCaption(){
- let video=document.getElementById("videoInput").files[0];
-
- if(video){
-  let url=URL.createObjectURL(video);
-  videoPreview.src=url;
- }
-
- let captions=[
-  "🔥 Watch till end 😱 #viral",
-  "ये वीडियो आपको चौंका देगा 😳",
-  "Ending miss मत करना 😱🔥",
-  "100% real story 😳"
- ];
-
- capOut.innerText=captions[Math.floor(Math.random()*captions.length)];
+// DOWNLOAD (record trick)
+function downloadAudio(){
+alert("Browser voice direct download possible nahi 😅\nScreen Recorder use karo bhai");
 }
 
-/* OTHERS */
-function idea(){ideaOut.innerText="Trending reel idea 🔥";}
-function titleGen(){titleOut.innerText="Shocking Truth 😱";}
-function hookGen(){hookOut.innerText="Wait till end 😳";}
-function tag(){tagOut.innerText="#viral #fyp #reels";}
-function rewrite(){rewriteOut.innerText="Better: "+rewriteInput.value;}
-function story(){storyOut.innerText="Once upon a time...";}
-function keyword(){keyOut.innerText="viral trending reels";}
+// FEATURES LOGIC
+function runFeature(type){
+let text = document.getElementById("text").value;
+let output = document.getElementById("output");
 
-/* COPY */
-function copy(id){
- let t=document.getElementById(id).innerText;
- navigator.clipboard.writeText(t);
- alert("Copied!");
+if(!text){
+output.innerHTML="⚠️ Pehle text likh bhai";
+return;
 }
 
+if(type=="script"){
+output.innerHTML="🎬 Script:\nEk horror kahani...\nRaat ke 2 baje darwaza khula...";
+}
+
+if(type=="caption"){
+output.innerHTML="📸 Caption:\n"+text+" 😍🔥\n#viral #trending #reels";
+}
+
+if(type=="idea"){
+output.innerHTML="💡 Idea:\nYouTube Shorts idea: "+text+" explain karo";
+}
+
+if(type=="title"){
+output.innerHTML="🔥 Title:\n"+text+" | Must Watch 😱";
+}
+
+if(type=="hook"){
+output.innerHTML="🧠 Hook:\nAgar tum ye nahi dekhoge to regret karoge...";
+}
+
+if(type=="hashtag"){
+output.innerHTML="#viral #fyp #trend #reels #youtube";
+}
+
+if(type=="rewrite"){
+output.innerHTML="🔁 Rewrite:\n"+text.split("").reverse().join("");
+}
+
+if(type=="story"){
+output.innerHTML="📖 Story:\nEk ladka tha... "+text+" aur fir sab badal gaya...";
+}
+
+if(type=="keyword"){
+output.innerHTML="🎯 Keywords:\n"+text+", viral, trending";
+}
+}
 </script>
 
 </body>
