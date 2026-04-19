@@ -2,78 +2,59 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Zentrix AI</title>
+<title>Zentrix AI PRO</title>
 
 <style>
 body{
-  margin:0;
-  font-family:sans-serif;
-  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-  color:white;
+margin:0;
+font-family:sans-serif;
+background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+color:white;
 }
-
-.container{
-  padding:20px;
-}
-
-h1{
-  text-align:center;
-  color:#8f7cff;
-}
+.container{padding:20px;}
+h1{text-align:center;color:#8f7cff;}
 
 textarea{
-  width:100%;
-  height:100px;
-  border-radius:10px;
-  padding:10px;
-  border:none;
-  outline:none;
+width:100%;
+height:100px;
+border-radius:10px;
+padding:10px;
+border:none;
 }
 
-select,button{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  font-size:16px;
+button{
+width:100%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:10px;
+font-size:16px;
 }
 
-.generate{
-  background:#6c63ff;
-  color:white;
-}
-
-.stop{
-  background:red;
-  color:white;
-}
-
-.download{
-  background:green;
-  color:white;
-}
+.generate{background:#6c63ff;color:white;}
+.stop{background:red;color:white;}
+.download{background:green;color:white;}
 
 .features{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-top:20px;
 }
 
 .feature{
-  background:#111827;
-  padding:15px;
-  border-radius:12px;
-  text-align:center;
-  cursor:pointer;
+background:#111827;
+padding:15px;
+border-radius:12px;
+cursor:pointer;
 }
 
 #output{
-  margin-top:20px;
-  background:#111;
-  padding:15px;
-  border-radius:10px;
+margin-top:20px;
+background:#111;
+padding:15px;
+border-radius:10px;
+white-space:pre-line;
 }
 </style>
 </head>
@@ -82,104 +63,170 @@ select,button{
 
 <div class="container">
 
-<h1>⚡ Zentrix AI</h1>
+<h1>⚡ Zentrix AI PRO</h1>
 
-<textarea id="text" placeholder="Enter text..."></textarea>
+<textarea id="text" placeholder="Enter topic..."></textarea>
 
-<button class="generate" onclick="speak()">Generate Voice</button>
-<button class="stop" onclick="stopVoice()">Stop</button>
-<button class="download" onclick="downloadAudio()">Download</button>
+<button class="generate" onclick="speak()">🔊 Voice</button>
+<button class="stop" onclick="stopVoice()">⛔ Stop</button>
+<button class="download" onclick="download()">⬇ Download</button>
 
 <div class="features">
 
-<div class="feature" onclick="useFeature('script')">✍ Script</div>
-<div class="feature" onclick="useFeature('caption')">📝 Caption</div>
-<div class="feature" onclick="useFeature('idea')">💡 Idea</div>
-<div class="feature" onclick="useFeature('title')">🔥 Title</div>
-<div class="feature" onclick="useFeature('hook')">🧠 Hook</div>
-<div class="feature" onclick="useFeature('hashtag')"># Hashtag</div>
-<div class="feature" onclick="useFeature('story')">📜 Story</div>
-<div class="feature" onclick="useFeature('keyword')">🎯 Keyword</div>
-<div class="feature" onclick="useFeature('intro')">🎬 Intro</div>
-<div class="feature" onclick="useFeature('outro')">🏁 Outro</div>
-<div class="feature" onclick="useFeature('viral')">🚀 Viral Line</div>
-<div class="feature" onclick="useFeature('facts')">📊 Facts</div>
-<div class="feature" onclick="useFeature('motivation')">💪 Motivation</div>
-<div class="feature" onclick="useFeature('dialogue')">🎭 Dialogue</div>
-<div class="feature" onclick="useFeature('reply')">💬 Reply</div>
-<div class="feature" onclick="useFeature('bio')">📌 Bio</div>
-<div class="feature" onclick="useFeature('headline')">📰 Headline</div>
-<div class="feature" onclick="useFeature('cta')">📣 CTA</div>
+<div class="feature" onclick="gen('story')">📜 Story</div>
+<div class="feature" onclick="gen('script')">✍ Script</div>
+<div class="feature" onclick="gen('caption')">📝 Caption</div>
+<div class="feature" onclick="gen('title')">🔥 Title</div>
+<div class="feature" onclick="gen('hook')">🧠 Hook</div>
+<div class="feature" onclick="gen('hashtag')"># Hashtag</div>
+<div class="feature" onclick="gen('idea')">💡 Idea</div>
+<div class="feature" onclick="gen('motivation')">💪 Motivation</div>
+<div class="feature" onclick="gen('dialogue')">🎭 Dialogue</div>
+<div class="feature" onclick="gen('bio')">📌 Bio</div>
+<div class="feature" onclick="gen('intro')">🎬 Intro</div>
+<div class="feature" onclick="gen('outro')">🏁 Outro</div>
+<div class="feature" onclick="gen('viral')">🚀 Viral Line</div>
+<div class="feature" onclick="gen('facts')">📊 Facts</div>
+<div class="feature" onclick="gen('question')">❓ Question</div>
+<div class="feature" onclick="gen('short')">📱 Shorts</div>
+<div class="feature" onclick="gen('headline')">📰 Headline</div>
+<div class="feature" onclick="gen('cta')">📣 CTA</div>
 
 </div>
 
-<div id="output"></div>
+<div id="output">Result yaha dikhega...</div>
 
 </div>
 
 <script>
 
 // 🎤 Voice
-let utter;
-
 function speak(){
-  let text = document.getElementById("text").value;
-  utter = new SpeechSynthesisUtterance(text);
-  speechSynthesis.speak(utter);
+let msg=new SpeechSynthesisUtterance(text.value);
+speechSynthesis.speak(msg);
 }
+function stopVoice(){speechSynthesis.cancel();}
 
-function stopVoice(){
-  speechSynthesis.cancel();
+// 😂 Popup
+function download(){
+showPopup("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
 }
-
-// 😂 Custom Popup (No Gmail issue)
-function downloadAudio(){
-  showPopup("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
-}
-
 function showPopup(msg){
-  let div = document.createElement("div");
-  div.innerHTML = `
-    <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-    background:#111;color:white;padding:20px;border-radius:10px;text-align:center;">
-      <p>${msg}</p>
-      <button onclick="this.parentElement.remove()">OK</button>
-    </div>`;
-  document.body.appendChild(div);
+let d=document.createElement("div");
+d.innerHTML=`<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+background:#111;padding:20px;border-radius:10px;text-align:center;">
+<p>${msg}</p>
+<button onclick="this.parentElement.remove()">OK</button></div>`;
+document.body.appendChild(d);
 }
 
-// ⚡ FEATURES LOGIC
-function useFeature(type){
-  let input = document.getElementById("text").value.trim();
-  let output = document.getElementById("output");
+// 🧠 DATA (AI JUGAAD)
+let horror=[
+"Raat ke 2 baje darwaza khula aur koi andar aaya...",
+"Andhere jungle me kisi ne uska naam liya...",
+"Purane ghar me awaaz aati thi jo kisi ko nahi sunai deti thi..."
+];
 
-  if(!input){
-    output.innerText="⚠️ Pehle text likh bhai!";
-    return;
-  }
+let love=[
+"Ek ladka tha jo use chupke se dekhta tha...",
+"Unki mulaqat ek din achanak hui aur sab badal gaya...",
+"Pehla pyar kabhi bhulaya nahi jata..."
+];
 
-  let result="";
+let motivation=[
+"Zindagi me kabhi haar mat mano...",
+"Jo ruk gaya wo haar gaya...",
+"Success unhe milti hai jo try karte rehte hain..."
+];
 
-  if(type=="title") result="🔥 "+input.toUpperCase()+" | Must Watch 😱";
-  else if(type=="hashtag") result=input.split(" ").map(w=>"#"+w).join(" ");
-  else if(type=="caption") result=input+" 😍🔥 Follow for more!";
-  else if(type=="script") result="Intro:\n"+input+"\n\nMiddle:\nStory build...\n\nEnd:\nLike & Subscribe!";
-  else if(type=="idea") result="💡 Idea: "+input+" par reel banao!";
-  else if(type=="hook") result="😱 Kya tum jaante ho? "+input;
-  else if(type=="story") result="Ek din... "+input+" aur sab badal gaya...";
-  else if(type=="keyword") result=input.split(" ").join(", ");
-  else if(type=="intro") result="🎬 Aaj hum baat karenge "+input+" ke baare me...";
-  else if(type=="outro") result="🙏 Thanks for watching! Like Share Subscribe!";
-  else if(type=="viral") result="🚀 Ye video aapki soch badal dega: "+input;
-  else if(type=="facts") result="📊 Fact: "+input+" ek interesting topic hai!";
-  else if(type=="motivation") result="💪 Kabhi haar mat maan! "+input;
-  else if(type=="dialogue") result="🎭 'Tum samajh nahi paoge... "+input+"'";
-  else if(type=="reply") result="💬 Thanks bhai ❤️";
-  else if(type=="bio") result="📌 Creator | "+input+" | Follow now 🚀";
-  else if(type=="headline") result="📰 Breaking: "+input;
-  else if(type=="cta") result="📣 Abhi follow karo aur support karo!";
+// 🎯 GENERATOR
+function gen(type){
 
-  output.innerText=result;
+let input=document.getElementById("text").value.toLowerCase();
+let out=document.getElementById("output");
+
+if(!input){
+out.innerText="⚠️ Topic likh bhai!";
+return;
+}
+
+let result="";
+
+// STORY SMART
+if(type=="story"){
+if(input.includes("horror")){
+result=horror[Math.floor(Math.random()*horror.length)];
+}
+else if(input.includes("love")){
+result=love[Math.floor(Math.random()*love.length)];
+}
+else{
+result=motivation[Math.floor(Math.random()*motivation.length)];
+}
+}
+
+// SCRIPT
+if(type=="script"){
+result="🎬 Hook:\nKya aap jante ho "+input+"?\n\n📖 Story:\n"+genRandom()+"\n\n🎯 End:\nFollow karo!";
+}
+
+// CAPTION
+if(type=="caption"){
+result=input+" 😍🔥\nFollow for more!\n#viral #reels #fyp";
+}
+
+// TITLE
+if(type=="title"){
+result="🔥 "+input.toUpperCase()+" | Must Watch 😱";
+}
+
+// HOOK
+if(type=="hook"){
+result="😱 Agar tumne ye nahi dekha to regret karoge!";
+}
+
+// HASHTAG
+if(type=="hashtag"){
+result=input.split(" ").map(w=>"#"+w).join(" ");
+}
+
+// IDEA
+if(type=="idea"){
+result="💡 "+input+" par ek viral reel banao!";
+}
+
+// MOTIVATION
+if(type=="motivation"){
+result=motivation[Math.floor(Math.random()*motivation.length)];
+}
+
+// DIALOGUE
+if(type=="dialogue"){
+result="🎭 'Tum samajh nahi paoge... "+input+"'";
+}
+
+// BIO
+if(type=="bio"){
+result="📌 Creator | "+input+" | Follow now 🚀";
+}
+
+// EXTRA FEATURES
+if(type=="intro") result="🎬 Welcome! Aaj hum baat karenge "+input;
+if(type=="outro") result="🙏 Thanks for watching! Like Share Subscribe!";
+if(type=="viral") result="🚀 Ye video viral hone wala hai: "+input;
+if(type=="facts") result="📊 Fact: "+input+" interesting hai!";
+if(type=="question") result="❓ Kya aap jante ho "+input+"?";
+if(type=="short") result="📱 Short idea: "+input;
+if(type=="headline") result="📰 Breaking: "+input;
+if(type=="cta") result="📣 Abhi follow karo!";
+
+// helper
+function genRandom(){
+return horror.concat(love,motivation)[Math.floor(Math.random()*9)];
+}
+
+out.innerText=result;
+
 }
 
 </script>
