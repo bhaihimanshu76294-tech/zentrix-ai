@@ -11,7 +11,9 @@ font-family:sans-serif;
 background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
 color:white;
 }
+
 .container{padding:20px;}
+
 h1{text-align:center;color:#8f7cff;}
 
 textarea{
@@ -22,22 +24,22 @@ padding:10px;
 border:none;
 }
 
-button{
+select,button{
 width:100%;
 margin-top:10px;
 padding:12px;
 border:none;
 border-radius:10px;
-font-size:16px;
 }
 
 .generate{background:#6c63ff;color:white;}
 .stop{background:red;color:white;}
 .download{background:green;color:white;}
 
+/* 🔥 Balanced Layout */
 .features{
-display:flex;
-flex-direction:column;
+display:grid;
+grid-template-columns:1fr 1fr;
 gap:10px;
 margin-top:20px;
 }
@@ -47,6 +49,7 @@ background:#111827;
 padding:15px;
 border-radius:12px;
 cursor:pointer;
+text-align:center;
 }
 
 #output{
@@ -67,6 +70,13 @@ white-space:pre-line;
 
 <textarea id="text" placeholder="Enter topic..."></textarea>
 
+<select id="voiceType">
+<option value="1">Normal</option>
+<option value="0.7">Slow</option>
+<option value="0.6">Deep</option>
+<option value="1.3">Fast</option>
+</select>
+
 <button class="generate" onclick="speak()">🔊 Voice</button>
 <button class="stop" onclick="stopVoice()">⛔ Stop</button>
 <button class="download" onclick="download()">⬇ Download</button>
@@ -83,14 +93,6 @@ white-space:pre-line;
 <div class="feature" onclick="gen('motivation')">💪 Motivation</div>
 <div class="feature" onclick="gen('dialogue')">🎭 Dialogue</div>
 <div class="feature" onclick="gen('bio')">📌 Bio</div>
-<div class="feature" onclick="gen('intro')">🎬 Intro</div>
-<div class="feature" onclick="gen('outro')">🏁 Outro</div>
-<div class="feature" onclick="gen('viral')">🚀 Viral Line</div>
-<div class="feature" onclick="gen('facts')">📊 Facts</div>
-<div class="feature" onclick="gen('question')">❓ Question</div>
-<div class="feature" onclick="gen('short')">📱 Shorts</div>
-<div class="feature" onclick="gen('headline')">📰 Headline</div>
-<div class="feature" onclick="gen('cta')">📣 CTA</div>
 
 </div>
 
@@ -100,43 +102,64 @@ white-space:pre-line;
 
 <script>
 
-// 🎤 Voice
+// 🎤 VOICE CONTROL
 function speak(){
 let msg=new SpeechSynthesisUtterance(text.value);
+msg.rate=document.getElementById("voiceType").value;
 speechSynthesis.speak(msg);
 }
-function stopVoice(){speechSynthesis.cancel();}
 
-// 😂 Popup
+function stopVoice(){
+speechSynthesis.cancel();
+}
+
+// 😂 DOWNLOAD POPUP
 function download(){
-showPopup("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
-}
-function showPopup(msg){
-let d=document.createElement("div");
-d.innerHTML=`<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
-background:#111;padding:20px;border-radius:10px;text-align:center;">
-<p>${msg}</p>
-<button onclick="this.parentElement.remove()">OK</button></div>`;
-document.body.appendChild(d);
+alert("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
 }
 
-// 🧠 DATA (AI JUGAAD)
+// 🧠 DATA (10-10 STORIES)
+
+// HORROR (10)
 let horror=[
-"Raat ke 2 baje darwaza khula aur koi andar aaya...",
-"Andhere jungle me kisi ne uska naam liya...",
-"Purane ghar me awaaz aati thi jo kisi ko nahi sunai deti thi..."
+"Raat ke 2 baje darwaza khula...",
+"Andhere jungle me awaaz aayi...",
+"Ek purane ghar me roshni jali...",
+"Kisi ne uska naam liya...",
+"Darwaza khud se band ho gaya...",
+"Raat bhar koi dekh raha tha...",
+"Footsteps sunai diye...",
+"Kisi ka saya dikh raha tha...",
+"Mirror me kuch alag dikh raha tha...",
+"Akhri call uski zindagi badal gayi..."
 ];
 
+// LOVE (10)
 let love=[
-"Ek ladka tha jo use chupke se dekhta tha...",
-"Unki mulaqat ek din achanak hui aur sab badal gaya...",
-"Pehla pyar kabhi bhulaya nahi jata..."
+"Ek ladka use chupke dekhta tha...",
+"Unki mulaqat achanak hui...",
+"Pehla pyar kabhi nahi bhulta...",
+"Wo uska intezar karta raha...",
+"Ek chhoti si smile ne sab badal diya...",
+"Usne kabhi apne dil ki baat nahi kahi...",
+"Ek din wo door chali gayi...",
+"Unki kahani adhuri reh gayi...",
+"Pyar me sab kuch mumkin hai...",
+"Wo sirf uske liye jeeta tha..."
 ];
 
+// MOTIVATION (10)
 let motivation=[
-"Zindagi me kabhi haar mat mano...",
+"Kabhi haar mat mano...",
 "Jo ruk gaya wo haar gaya...",
-"Success unhe milti hai jo try karte rehte hain..."
+"Success mehnat se milti hai...",
+"Zindagi ek challenge hai...",
+"Har din ek nayi shuruaat hai...",
+"Khud par bharosa rakho...",
+"Failure success ka part hai...",
+"Aaj nahi to kal milega...",
+"Consistency hi key hai...",
+"Dream big, work hard..."
 ];
 
 // 🎯 GENERATOR
@@ -152,27 +175,21 @@ return;
 
 let result="";
 
-// STORY SMART
+// STORY
 if(type=="story"){
-if(input.includes("horror")){
-result=horror[Math.floor(Math.random()*horror.length)];
-}
-else if(input.includes("love")){
-result=love[Math.floor(Math.random()*love.length)];
-}
-else{
-result=motivation[Math.floor(Math.random()*motivation.length)];
-}
+if(input.includes("horror")) result=random(horror);
+else if(input.includes("love")) result=random(love);
+else result=random(motivation);
 }
 
 // SCRIPT
 if(type=="script"){
-result="🎬 Hook:\nKya aap jante ho "+input+"?\n\n📖 Story:\n"+genRandom()+"\n\n🎯 End:\nFollow karo!";
+result="🎬 Hook:\nKya aap jante ho "+input+"?\n\n📖 Story:\n"+random(horror.concat(love,motivation))+"\n\n🎯 End:\nFollow karo!";
 }
 
 // CAPTION
 if(type=="caption"){
-result=input+" 😍🔥\nFollow for more!\n#viral #reels #fyp";
+result=input+" 😍🔥\nFollow for more!\n#viral #reels";
 }
 
 // TITLE
@@ -182,7 +199,7 @@ result="🔥 "+input.toUpperCase()+" | Must Watch 😱";
 
 // HOOK
 if(type=="hook"){
-result="😱 Agar tumne ye nahi dekha to regret karoge!";
+result="😱 Ye dekhkar hairaan reh jaoge!";
 }
 
 // HASHTAG
@@ -192,12 +209,12 @@ result=input.split(" ").map(w=>"#"+w).join(" ");
 
 // IDEA
 if(type=="idea"){
-result="💡 "+input+" par ek viral reel banao!";
+result="💡 "+input+" par reel banao!";
 }
 
 // MOTIVATION
 if(type=="motivation"){
-result=motivation[Math.floor(Math.random()*motivation.length)];
+result=random(motivation);
 }
 
 // DIALOGUE
@@ -210,19 +227,9 @@ if(type=="bio"){
 result="📌 Creator | "+input+" | Follow now 🚀";
 }
 
-// EXTRA FEATURES
-if(type=="intro") result="🎬 Welcome! Aaj hum baat karenge "+input;
-if(type=="outro") result="🙏 Thanks for watching! Like Share Subscribe!";
-if(type=="viral") result="🚀 Ye video viral hone wala hai: "+input;
-if(type=="facts") result="📊 Fact: "+input+" interesting hai!";
-if(type=="question") result="❓ Kya aap jante ho "+input+"?";
-if(type=="short") result="📱 Short idea: "+input;
-if(type=="headline") result="📰 Breaking: "+input;
-if(type=="cta") result="📣 Abhi follow karo!";
-
 // helper
-function genRandom(){
-return horror.concat(love,motivation)[Math.floor(Math.random()*9)];
+function random(arr){
+return arr[Math.floor(Math.random()*arr.length)];
 }
 
 out.innerText=result;
