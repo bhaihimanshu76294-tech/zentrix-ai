@@ -1,185 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zentrix AI</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-
 body{
-background: radial-gradient(circle at top,#1e1b4b,#020617 70%);
-color:white;
-padding:15px;
+  margin:0;
+  font-family:sans-serif;
+  background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  color:white;
 }
 
-.logo{
-text-align:center;
-font-size:26px;
-font-weight:700;
-margin-bottom:15px;
-background:linear-gradient(90deg,#8b5cf6,#6366f1);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+.container{
+  padding:20px;
 }
 
-.box{
-background:#0f172a;
-padding:15px;
-border-radius:15px;
-margin-bottom:15px;
+h1{
+  text-align:center;
+  color:#8f7cff;
 }
 
-textarea,select,button{
-width:100%;
-margin-top:8px;
-padding:10px;
-border-radius:10px;
-border:none;
+textarea{
+  width:100%;
+  height:100px;
+  border-radius:10px;
+  padding:10px;
+  border:none;
+  outline:none;
 }
 
-textarea{background:#111827;color:white;}
-
-.generate{background:#6366f1;color:white;}
-.stop{background:red;color:white;}
-.download{background:#22c55e;color:white;}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
+select,button{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
 }
 
-.card{
-background:#0f172a;
-padding:12px;
-border-radius:12px;
-cursor:pointer;
+.generate{
+  background:#6c63ff;
+  color:white;
 }
 
-.output{
-margin-top:15px;
-background:#020617;
-padding:12px;
-border-radius:10px;
-min-height:80px;
-white-space:pre-line;
+.stop{
+  background:red;
+  color:white;
+}
+
+.download{
+  background:green;
+  color:white;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+.feature{
+  background:#111827;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  cursor:pointer;
+}
+
+#output{
+  margin-top:20px;
+  background:#111;
+  padding:15px;
+  border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="logo">⚡ Zentrix AI</div>
+<div class="container">
 
-<div class="box">
+<h1>⚡ Zentrix AI</h1>
+
 <textarea id="text" placeholder="Enter text..."></textarea>
 
-<select id="voice"></select>
-
-<select id="style">
-<option value="normal">Normal</option>
-<option value="fast">Fast</option>
-<option value="slow">Slow</option>
-<option value="deep">Deep</option>
-</select>
-
 <button class="generate" onclick="speak()">Generate Voice</button>
-<button class="stop" onclick="stop()">Stop</button>
-<button class="download" onclick="download()">Download</button>
-</div>
+<button class="stop" onclick="stopVoice()">Stop</button>
+<button class="download" onclick="downloadAudio()">Download</button>
 
-<div class="grid">
+<div class="features">
 
-<div class="card" onclick="tool('script')">✍️ Script</div>
-<div class="card" onclick="tool('caption')">📝 Caption</div>
-<div class="card" onclick="tool('idea')">💡 Idea</div>
-<div class="card" onclick="tool('title')">🔥 Title</div>
-<div class="card" onclick="tool('hook')">🧠 Hook</div>
-<div class="card" onclick="tool('hashtag')"># Hashtag</div>
-<div class="card" onclick="tool('story')">📜 Story</div>
-<div class="card" onclick="tool('keyword')">🎯 Keyword</div>
-<div class="card" onclick="tool('intro')">🎬 Intro</div>
-<div class="card" onclick="tool('outro')">🏁 Outro</div>
-<div class="card" onclick="tool('short')">📱 Shorts</div>
-<div class="card" onclick="tool('viral')">🚀 Viral Line</div>
-<div class="card" onclick="tool('question')">❓ Question</div>
-<div class="card" onclick="tool('facts')">📊 Facts</div>
-<div class="card" onclick="tool('motivation')">💪 Motivation</div>
-<div class="card" onclick="tool('dialogue')">🎭 Dialogue</div>
-<div class="card" onclick="tool('comment')">💬 Comment Reply</div>
-<div class="card" onclick="tool('bio')">📌 Bio</div>
-<div class="card" onclick="tool('headline')">📰 Headline</div>
-<div class="card" onclick="tool('cta')">📢 CTA</div>
+<div class="feature" onclick="useFeature('script')">✍ Script</div>
+<div class="feature" onclick="useFeature('caption')">📝 Caption</div>
+<div class="feature" onclick="useFeature('idea')">💡 Idea</div>
+<div class="feature" onclick="useFeature('title')">🔥 Title</div>
+<div class="feature" onclick="useFeature('hook')">🧠 Hook</div>
+<div class="feature" onclick="useFeature('hashtag')"># Hashtag</div>
+<div class="feature" onclick="useFeature('story')">📜 Story</div>
+<div class="feature" onclick="useFeature('keyword')">🎯 Keyword</div>
+<div class="feature" onclick="useFeature('intro')">🎬 Intro</div>
+<div class="feature" onclick="useFeature('outro')">🏁 Outro</div>
+<div class="feature" onclick="useFeature('viral')">🚀 Viral Line</div>
+<div class="feature" onclick="useFeature('facts')">📊 Facts</div>
+<div class="feature" onclick="useFeature('motivation')">💪 Motivation</div>
+<div class="feature" onclick="useFeature('dialogue')">🎭 Dialogue</div>
+<div class="feature" onclick="useFeature('reply')">💬 Reply</div>
+<div class="feature" onclick="useFeature('bio')">📌 Bio</div>
+<div class="feature" onclick="useFeature('headline')">📰 Headline</div>
+<div class="feature" onclick="useFeature('cta')">📣 CTA</div>
 
 </div>
 
-<div class="output" id="out">Result yaha dikhega...</div>
+<div id="output"></div>
+
+</div>
 
 <script>
 
-/* VOICE */
-let voices=[];
-speechSynthesis.onvoiceschanged=()=>{
-voices=speechSynthesis.getVoices();
-voice.innerHTML="";
-voices.forEach((v,i)=>{
-let o=document.createElement("option");
-o.value=i;
-o.text=v.name;
-voice.appendChild(o);
-});
-};
+// 🎤 Voice
+let utter;
 
 function speak(){
-let msg=new SpeechSynthesisUtterance(text.value);
-msg.voice=voices[voice.value];
-
-if(style.value=="fast") msg.rate=1.5;
-if(style.value=="slow") msg.rate=0.7;
-if(style.value=="deep") msg.pitch=0.6;
-
-speechSynthesis.cancel();
-speechSynthesis.speak(msg);
+  let text = document.getElementById("text").value;
+  utter = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(utter);
 }
 
-function stop(){speechSynthesis.cancel();}
-
-/* DOWNLOAD (NO EMAIL) */
-function download(){
-alert("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
+function stopVoice(){
+  speechSynthesis.cancel();
 }
 
-/* FEATURES */
-function tool(t){
-let txt=text.value;
-if(!txt){out.innerHTML="Text likh bhai";return;}
-
-switch(t){
-case "script": out.innerHTML="Hook: "+txt+"...\nStory...\nEnd..."; break;
-case "caption": out.innerHTML=txt+"\n#viral #fyp"; break;
-case "idea": out.innerHTML="Idea: "+txt+" explain karo"; break;
-case "title": out.innerHTML=txt+" | Must Watch 😱"; break;
-case "hook": out.innerHTML="Agar ye nahi dekha to regret karoge!"; break;
-case "hashtag": out.innerHTML="#viral #trend #shorts"; break;
-case "story": out.innerHTML="Ek din "+txt+" hua..."; break;
-case "keyword": out.innerHTML=txt+", viral, trending"; break;
-case "intro": out.innerHTML="Welcome guys! Aaj hum baat karenge "+txt; break;
-case "outro": out.innerHTML="Thanks for watching! Follow karo"; break;
-case "short": out.innerHTML="Short idea: "+txt; break;
-case "viral": out.innerHTML="Ye cheez sabko nahi pata! "+txt; break;
-case "question": out.innerHTML="Kya aap jante ho "+txt+"?"; break;
-case "facts": out.innerHTML="Fact: "+txt; break;
-case "motivation": out.innerHTML="Kabhi give up mat karo! "+txt; break;
-case "dialogue": out.innerHTML="Dialogue: "+txt; break;
-case "comment": out.innerHTML="Nice bro! "+txt; break;
-case "bio": out.innerHTML="Bio: "+txt; break;
-case "headline": out.innerHTML="Breaking: "+txt; break;
-case "cta": out.innerHTML="Like share subscribe! "+txt; break;
+// 😂 Custom Popup (No Gmail issue)
+function downloadAudio(){
+  showPopup("😂 Screen record kar le bhai!\n— Himanshu Gupta 😎");
 }
+
+function showPopup(msg){
+  let div = document.createElement("div");
+  div.innerHTML = `
+    <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    background:#111;color:white;padding:20px;border-radius:10px;text-align:center;">
+      <p>${msg}</p>
+      <button onclick="this.parentElement.remove()">OK</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+
+// ⚡ FEATURES LOGIC
+function useFeature(type){
+  let input = document.getElementById("text").value.trim();
+  let output = document.getElementById("output");
+
+  if(!input){
+    output.innerText="⚠️ Pehle text likh bhai!";
+    return;
+  }
+
+  let result="";
+
+  if(type=="title") result="🔥 "+input.toUpperCase()+" | Must Watch 😱";
+  else if(type=="hashtag") result=input.split(" ").map(w=>"#"+w).join(" ");
+  else if(type=="caption") result=input+" 😍🔥 Follow for more!";
+  else if(type=="script") result="Intro:\n"+input+"\n\nMiddle:\nStory build...\n\nEnd:\nLike & Subscribe!";
+  else if(type=="idea") result="💡 Idea: "+input+" par reel banao!";
+  else if(type=="hook") result="😱 Kya tum jaante ho? "+input;
+  else if(type=="story") result="Ek din... "+input+" aur sab badal gaya...";
+  else if(type=="keyword") result=input.split(" ").join(", ");
+  else if(type=="intro") result="🎬 Aaj hum baat karenge "+input+" ke baare me...";
+  else if(type=="outro") result="🙏 Thanks for watching! Like Share Subscribe!";
+  else if(type=="viral") result="🚀 Ye video aapki soch badal dega: "+input;
+  else if(type=="facts") result="📊 Fact: "+input+" ek interesting topic hai!";
+  else if(type=="motivation") result="💪 Kabhi haar mat maan! "+input;
+  else if(type=="dialogue") result="🎭 'Tum samajh nahi paoge... "+input+"'";
+  else if(type=="reply") result="💬 Thanks bhai ❤️";
+  else if(type=="bio") result="📌 Creator | "+input+" | Follow now 🚀";
+  else if(type=="headline") result="📰 Breaking: "+input;
+  else if(type=="cta") result="📣 Abhi follow karo aur support karo!";
+
+  output.innerText=result;
 }
 
 </script>
